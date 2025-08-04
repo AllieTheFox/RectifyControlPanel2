@@ -10,7 +10,10 @@ public:
 
 	static HRESULT Create(CPNAV_LIST list, CControlPanelNavLink **ppLink);
 
-	CPNAV_LIST GetList() { return _list; }
+	CPNAV_LIST GetList()
+	{
+		return _list;
+	}
 
 	HRESULT SetName(HINSTANCE hInstance, UINT nResId);
 	HRESULT SetName(LPCWSTR pszName);
@@ -18,11 +21,19 @@ public:
 
 	HRESULT SetNameAcc(HINSTANCE hInstance, UINT nResId);
 	HRESULT SetNameAcc(LPCWSTR pszNameAcc);
-	LPWSTR GetNameAcc() { return _pszNameAcc; }
+
+	LPWSTR GetNameAcc()
+	{
+		return !_pszName ? _pszNameAcc : _pszName;
+	}
 
 	HRESULT SetIcon(HINSTANCE hInstance, int nIconId);
 	HRESULT SetIcon(HICON hIcon);
-	HICON GetIcon() { return _hIcon; }
+
+	HICON GetIcon()
+	{
+		return CopyIcon(_hIcon);
+	}
 
 	void SetSQMStream(DWORD dwDatapointId, DWORD cSqmStreamEntries, SQM_STREAM_ENTRY *pSqmStreamEntries)
 	{
@@ -55,14 +66,20 @@ public:
 		return _cmd.SetAppletOrCommand(pszApplet, pszAppletPage);
 	}
 
-	CControlPanelNavLinkCommand *GetCommand() { return &_cmd; }
+	CControlPanelNavLinkCommand *GetCommand()
+	{
+		return _cmd.Copy();
+	}
 
 	void SetDisabled(bool fDisabled)
 	{
 		_fDisabled = fDisabled;
 	}
 
-	bool GetDisabled() { return _fDisabled; }
+	bool GetDisabled()
+	{
+		return _fDisabled;
+	}
 
 private:
 	CPNAV_LIST _list;

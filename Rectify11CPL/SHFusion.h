@@ -16,6 +16,16 @@ BOOL NT5_ActivateActCtx(HANDLE hActCtx, ULONG_PTR *pulCookie)
 	return ActivateActCtx(hActCtx, pulCookie);
 }
 
+BOOL NT5_DeactivateActCtx(ULONG_PTR ulCookie)
+{
+	return DeactivateActCtx(0, ulCookie);
+}
+
+void NT5_ReleaseActCtx(void *a1)
+{
+	ReleaseActCtx(a1);
+}
+
 BOOL SHFusionInitializeFromModuleID(HMODULE hMod, int id);
 
 BOOL SHActivateContext(ULONG_PTR *pulCookie)
@@ -39,7 +49,7 @@ void SHDeactivateContext(ULONG_PTR ulCookie)
 {
 	if (ulCookie != 0)
 	{
-		DeactivateActCtx(0, ulCookie);
+		NT5_DeactivateActCtx(ulCookie);
 	}
 }
 

@@ -70,7 +70,31 @@ public:
 
 	bool CanInvoke(IOpenControlPanel *pocp)
 	{
-		return true; // TODO: Implement this
+		bool fInvoke = true;
+		if (_cmdType == CPNAV_CMDTYPE_CONTROLPANEL)
+		{
+			if (pocp)
+			{
+				pocp->AddRef();
+			}
+			else if (FAILED(CoCreateInstance(CLSID_OpenControlPanel, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pocp))))
+			{
+				return false;
+			}
+
+			IControlPanelPrivate *pcpp;
+			if (SUCCEEDED(pocp->QueryInterface(IID_PPV_ARGS(&pcpp))))
+			{
+				pcpp->AddEnumFlag(0x2000);
+				pcpp->Release();
+			}
+
+			WCHAR szPath[MAX_PATH];
+			fInvoke = SUCCEEDED(pocp->GetPath(_pszAppletOrCommand, szPath, ARRAYSIZE(szPath)));
+			pocp->Release();
+		}
+
+		return fInvoke;
 	}
 
 	HRESULT Invoke(HWND, IUnknown *)
