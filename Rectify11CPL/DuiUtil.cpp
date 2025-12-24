@@ -104,17 +104,24 @@ void DUI_WalkIUnknownElements(DirectUI::Element *pe, PFNELEMENTCALLBACK pfn, LPA
 
 HRESULT WINAPI DUIFramework_InitDUI()
 {
-    HRESULT hr = InitProcessPriv(DUI_VERSION, g_hInst, true, true, true);
+    HRESULT hr = InitProcessPriv(DUI_VERSION, g_hinst, true, true, true);
     if (SUCCEEDED(hr))
     {
         hr = InitThread(DirectUI::TSM_IMMERSIVE);
         if (FAILED(hr))
         {
-            UnInitProcessPriv(g_hInst);
+            UnInitProcessPriv(g_hinst);
         }
     }
 
     return hr;
+}
+
+HRESULT WINAPI DUIFramework_UninitDUI()
+{
+    DirectUI::UnInitThread();
+    DirectUI::UnInitProcessPriv(g_hinst);
+    return S_OK;
 }
 
 #include "FocusIndicator.h"

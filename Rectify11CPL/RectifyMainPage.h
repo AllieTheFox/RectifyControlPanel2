@@ -24,7 +24,7 @@ public:
 
 	static HRESULT Register();
 
-	IFACEMETHOD(QueryInterface)(REFIID riid, void ** ppv) override;
+	IFACEMETHOD(QueryInterface)(REFIID riid, void **ppv) override;
 	IFACEMETHOD_(ULONG, AddRef)() override { return CElementWithSite::AddRef(); }
 	IFACEMETHOD_(ULONG, Release)() override { return CElementWithSite::Release(); }
 

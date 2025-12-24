@@ -42,10 +42,11 @@ public:
 
 	HRESULT SetCommandNotify(int nLinkId)
 	{
+		_cmd.SetType(CPNAV_CMDTYPE_NOTIFY);
+
 		if (nLinkId <= 0)
 			return E_INVALIDARG;
 
-		_cmd.SetType(CPNAV_CMDTYPE_NOTIFY);
 		_cmd.SetId(nLinkId);
 		return S_OK;
 	}

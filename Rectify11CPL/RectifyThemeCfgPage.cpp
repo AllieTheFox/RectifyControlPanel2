@@ -27,7 +27,7 @@ HRESULT RectifyThemeCfgPage::Register()
 	HRESULT	hr = CElementWithSite::Register();
 	if (SUCCEEDED(hr))
 	{
-		hr = DirectUI::ClassInfo<RectifyThemeCfgPage, CElementWithSite>::RegisterGlobal(g_hInst, L"RectifyThemeCfgPage", nullptr, 0);
+		hr = DirectUI::ClassInfo<RectifyThemeCfgPage, CElementWithSite>::RegisterGlobal(g_hinst, L"RectifyThemeCfgPage", nullptr, 0);
 	}
 
 	return hr;

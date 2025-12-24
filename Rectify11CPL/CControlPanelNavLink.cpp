@@ -4,9 +4,9 @@
 
 CControlPanelNavLink::CControlPanelNavLink(CPNAV_LIST list)
 	: _list(list)
-	, _pszName(NULL)
-	, _pszNameAcc(NULL)
-	, _hIcon(NULL)
+	, _pszName(nullptr)
+	, _pszNameAcc(nullptr)
+	, _hIcon(nullptr)
 	, _fDisabled(false)
 {
 }
@@ -54,17 +54,27 @@ HRESULT CControlPanelNavLink::SetNameAcc(LPCWSTR pszNameAcc)
 HRESULT CControlPanelNavLink::SetIcon(HICON hIcon)
 {
 	_hIcon = hIcon;
-	return S_OK;
+	return _hIcon ? S_OK : E_FAIL;
 }
 
 HRESULT CControlPanelNavLink::SetIcon(HINSTANCE hInstance, int nIconId)
 {
-	SHSTOCKICONINFO sii = { sizeof(sii) };
-	HRESULT hr = SHGetStockIconInfo(SHSTOCKICONID(nIconId), (SHGFI_SMALLICON | SHGFI_ICON), &sii);
-	if (SUCCEEDED(hr))
+	// If hInstance is non-null, try to load the icon from the specified module first.
+	if (hInstance)
 	{
-		hr = SetIcon(sii.hIcon);
+		_hIcon = (HICON)LoadImage(
+			hInstance, MAKEINTRESOURCE(nIconId), IMAGE_ICON, GetSystemMetrics(SM_CXSMICON),
+			GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR);
+		return _hIcon != nullptr ? S_OK : E_FAIL;
 	}
 
+	// Otherwise, load the icon from the stock icons.
+	SHSTOCKICONINFO sii = {};
+	sii.cbSize = sizeof(sii);
+	HRESULT hr = SHGetStockIconInfo((SHSTOCKICONID)nIconId, SHGSI_SMALLICON | SHGSI_ICON, &sii);
+	if (SUCCEEDED(hr))
+	{
+		_hIcon = sii.hIcon;
+	}
 	return hr;
 }

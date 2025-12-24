@@ -9,7 +9,9 @@ HRESULT WINAPI IUnknown_ProfferService(IUnknown *punkSite, REFGUID sidWhat, ISer
 	if (SUCCEEDED(hr))
 	{
 		if (pService)
+		{
 			hr = pps->ProfferService(sidWhat, pService, pdwCookie);
+		}
 		else
 		{
 			hr = pps->RevokeService(*pdwCookie);

@@ -28,7 +28,7 @@ HRESULT loadThemeDll()
 	}
 
 	WCHAR filename[MAX_PATH];
-	GetModuleFileName(g_hInst, filename, sizeof(filename) / sizeof(WCHAR));
+	GetModuleFileName(g_hinst, filename, sizeof(filename) / sizeof(WCHAR));
 
 	PathRemoveFileSpecW(filename);
 

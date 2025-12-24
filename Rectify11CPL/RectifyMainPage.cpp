@@ -24,13 +24,7 @@ RectifyMainPage::~RectifyMainPage()
 
 HRESULT RectifyMainPage::Register()
 {
-	HRESULT hr = CElementWithSite::Register();
-	if (SUCCEEDED(hr))
-	{
-		hr = DirectUI::ClassInfo<RectifyMainPage, CElementWithSite>::RegisterGlobal(g_hInst, L"RectifyMainPage", nullptr, 0);
-	}
-
-	return hr;
+	return DirectUI::ClassInfo<RectifyMainPage, CElementWithSite>::RegisterGlobal(g_hinst, L"RectifyMainPage", nullptr, 0);
 }
 
 HRESULT RectifyMainPage::Create(Element *pParent, DWORD *pdwDeferCookie, Element **ppElement)
@@ -299,7 +293,7 @@ void RectifyMainPage::_ShowRestartExplorer()
 void RectifyMainPage::_UpdateThemeGraphic()
 {
 	LPCWSTR id = IsDarkTheme() ? MAKEINTRESOURCE(IDB_DARKPREVIEW) : MAKEINTRESOURCE(IDB_LIGHTPREVIEW);
-	HBITMAP bmp = (HBITMAP)LoadImage(g_hInst, id, IMAGE_BITMAP, 256, 256, 0);
+	HBITMAP bmp = (HBITMAP)LoadImage(g_hinst, id, IMAGE_BITMAP, 256, 256, 0);
 	if (bmp == NULL)
 	{
 		return;
@@ -316,21 +310,20 @@ DEFINE_GUID(SID_PerLayoutPropertyBag, 0xA46E5C25, 0xC09C, 0x4CA8, 0x9A, 0x53, 0x
 HRESULT RectifyMainPage::_InitNavLinks()
 {
 	auto pLinks = new(std::nothrow) CControlPanelNavLinks();
-
 	if (!pLinks)
 		return E_OUTOFMEMORY;
 
-	CControlPanelNavLink *pLink;
-	HRESULT hr = pLinks->AddLinkControlPanel(CPNAV_LIST_TASKS, g_hInst, IDS_UPDATE, L"Rectify11.SettingsCPL", L"pageThemePref", &pLink);
+	CControlPanelNavLink* pLink;
+	HRESULT hr = pLinks->AddLinkControlPanel(CPNAV_LIST_TASKS, g_hinst, IDS_UPDATE, L"Rectify11.SettingsCPL", L"pageThemePref", &pLink);
 	if (SUCCEEDED(hr))
 	{
-		hr = pLinks->AddLinkShellEx(CPNAV_LIST_TASKS, g_hInst, IDS_UNINSTALL, L"C:\\Windows\\Rectify11\\Uninstall.exe", L"", &pLink);
+		hr = pLinks->AddLinkShellEx(CPNAV_LIST_TASKS, g_hinst, IDS_UNINSTALL, L"C:\\Windows\\Rectify11\\Uninstall.exe", L"", &pLink);
 		if (SUCCEEDED(hr))
 		{
-			hr = pLinks->AddLinkControlPanel(CPNAV_LIST_SEEALSO, g_hInst, IDS_SYSINFO, L"Microsoft.System", L"", &pLink);
+			hr = pLinks->AddLinkControlPanel(CPNAV_LIST_SEEALSO, g_hinst, IDS_SYSINFO, L"Microsoft.System", L"", &pLink);
 			if (SUCCEEDED(hr))
 			{
-				IPropertyBag *ppb;
+				IPropertyBag* ppb;
 				hr = IUnknown_QueryService(_punkSite, SID_PerLayoutPropertyBag, IID_PPV_ARGS(&ppb));
 				if (SUCCEEDED(hr))
 				{
@@ -353,7 +346,7 @@ void RectifyMainPage::_UpdateThemetoolStatus()
 	wstring statusText;
 
 	WCHAR buffer1[1024];
-	if (FAILED(LoadStringW(g_hInst, IDS_THEMETOOLSTATUS, buffer1, 1023)))
+	if (FAILED(LoadStringW(g_hinst, IDS_THEMETOOLSTATUS, buffer1, 1023)))
 	{
 		wcscpy_s(buffer1, L"[SECURE UX STATUS STRING MISSING]: ");
 	}
@@ -365,7 +358,7 @@ void RectifyMainPage::_UpdateThemetoolStatus()
 	{
 		if (flags & SECUREUXTHEME_STATE_CURRENT)
 		{
-			if (FAILED(LoadStringW(g_hInst, IDS_OK, buffer1, 1023)))
+			if (FAILED(LoadStringW(g_hinst, IDS_OK, buffer1, 1023)))
 			{
 				wcscpy_s(buffer1, L"OK STRING MISSING");
 			}
@@ -375,7 +368,7 @@ void RectifyMainPage::_UpdateThemetoolStatus()
 			status->SetForegroundStdColor(44); // forest green
 		}
 		else {
-			if (FAILED(LoadStringW(g_hInst, IDS_OUTDATED, buffer1, 1023)))
+			if (FAILED(LoadStringW(g_hinst, IDS_OUTDATED, buffer1, 1023)))
 			{
 				wcscpy_s(buffer1, L"OUTDATED STRING MISSING");
 			}
@@ -386,7 +379,7 @@ void RectifyMainPage::_UpdateThemetoolStatus()
 		}
 	}
 	else {
-		if (FAILED(LoadStringW(g_hInst, IDS_NOTINSTALLED, buffer1, 1023)))
+		if (FAILED(LoadStringW(g_hinst, IDS_NOTINSTALLED, buffer1, 1023)))
 		{
 			wcscpy_s(buffer1, L"NOT INSTALLED STRING MISSING");
 		}
@@ -525,7 +518,7 @@ HRESULT RectifyMainPage::LayoutInitialized()
 			if (result == 0)
 			{
 				WCHAR versionstr[1024];
-				if (FAILED(LoadStringW(g_hInst, IDS_VERSION, versionstr, 1023)))
+				if (FAILED(LoadStringW(g_hinst, IDS_VERSION, versionstr, 1023)))
 				{
 					wcscpy_s(versionstr, L"[VERSION STRING MISSING]: ");
 				}
@@ -537,11 +530,11 @@ HRESULT RectifyMainPage::LayoutInitialized()
 			{
 				WCHAR versionstr[1024];
 				WCHAR notapplicable[1024];
-				if (FAILED(LoadStringW(g_hInst, IDS_VERSION, versionstr, 1023)))
+				if (FAILED(LoadStringW(g_hinst, IDS_VERSION, versionstr, 1023)))
 				{
 					wcscpy_s(versionstr, L"[VERSION STRING MISSING]: ");
 				}
-				if (FAILED(LoadStringW(g_hInst, IDS_NA, notapplicable, 1023)))
+				if (FAILED(LoadStringW(g_hinst, IDS_NA, notapplicable, 1023)))
 				{
 					wcscpy_s(notapplicable, L"[N/A STRING MISSING]: ");
 				}

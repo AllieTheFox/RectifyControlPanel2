@@ -19,9 +19,9 @@
 
 FrameProvider::FrameProvider(HINSTANCE hinst, LPCWSTR pszCommonResidToCreate)
 	: _punkSite(nullptr)
-	, _prprov(nullptr)
 	, _hinst(hinst)
 	, _hrInit(E_FAIL)
+	, _prprov(nullptr)
 {
 	StringCchCopy(_szResID, ARRAYSIZE(_szResID), pszCommonResidToCreate);
 	DllAddRef();
@@ -62,8 +62,7 @@ FrameProvider::~FrameProvider()
 
 	if (SUCCEEDED(_hrInit))
 	{
-		DirectUI::UnInitThread();
-		DirectUI::UnInitProcessPriv(_hinst);
+		DUIFramework_UninitDUI();
 	}
 
 	DllRelease();

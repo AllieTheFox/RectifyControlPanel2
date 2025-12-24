@@ -37,7 +37,7 @@ HRESULT CFocusIndicator::Register()
 		&impFirstTabTargetProp
 	};
 
-	return DirectUI::ClassInfo<CFocusIndicator, DirectUI::Element>::RegisterGlobal(g_hInst, L"FocusIndicator", pProps, ARRAYSIZE(pProps));
+	return DirectUI::ClassInfo<CFocusIndicator, DirectUI::Element>::RegisterGlobal(g_hinst, L"FocusIndicator", pProps, ARRAYSIZE(pProps));
 }
 
 HRESULT CFocusIndicator::Create(DirectUI::Element *pParent, DWORD *pdwDeferCookie, DirectUI::Element **ppElement)

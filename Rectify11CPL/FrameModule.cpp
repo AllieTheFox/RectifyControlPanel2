@@ -40,7 +40,7 @@ static const DirectUI::PropertyInfo impModuleIDProp =
   .fFlags = DirectUI::PF_Normal,
   .fGroups = DirectUI::PG_None,
   .pValidValues = vvimpModuleIDProp,
-  .pEnumMaps = NULL,
+  .pEnumMaps = nullptr,
   .DefaultProc = (DefaultValueProcT)&svShellExecuteVerb,
   .pData = &dataimpModuleIDProp
 };
@@ -55,7 +55,7 @@ HRESULT CFrameModule::Register()
             &impModuleIDProp
         };
 
-        hr = ClassInfo<CFrameModule, CElementWithSite>::RegisterGlobal(g_hInst, L"FrameModule", s_rgProps, ARRAYSIZE(s_rgProps));
+        hr = ClassInfo<CFrameModule, CElementWithSite>::RegisterGlobal(g_hinst, L"FrameModule", s_rgProps, ARRAYSIZE(s_rgProps));
     }
 
     return hr;
@@ -99,3 +99,46 @@ HRESULT CFrameModule::GetModuleID(LPWSTR *ppszModuleID)
     return hr;
 }
 
+template <typename TElement, int nCreate, int nActive, bool bUseShellBorderLayout>
+HRESULT FrameModule_CreateImpl(DirectUI::Element* pParent, DWORD* pdwDeferCookie, DirectUI::Element** ppElement)
+{
+    *ppElement = nullptr;
+
+    TElement* pT = DirectUI::HNew<TElement>();
+    HRESULT hr = pT ? S_OK : E_OUTOFMEMORY;
+    if (SUCCEEDED(hr))
+    {
+        hr = pT->Initialize(nCreate, pParent, pdwDeferCookie);
+    }
+
+    if (SUCCEEDED(hr))
+    {
+        hr = pT->SetActive(nActive);
+    }
+
+    if constexpr (bUseShellBorderLayout)
+    {
+        if (SUCCEEDED(hr))
+        {
+            DirectUI::Layout* pLayout;
+            hr = DirectUI::ShellBorderLayout::Create(&pLayout);
+            if (SUCCEEDED(hr))
+            {
+                hr = pT->SetLayout(pLayout);
+            }
+        }
+    }
+
+    if (SUCCEEDED(hr))
+    {
+        *ppElement = pT;
+        pT = nullptr;
+    }
+
+    if (pT)
+    {
+        pT->Destroy(false);
+    }
+
+    return hr;
+}

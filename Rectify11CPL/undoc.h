@@ -59,12 +59,11 @@ enum CPNAV_CMDTYPE : int
 };
 
 MIDL_INTERFACE("6FABDA16-031E-47E3-B2A2-2339C05CCB9E")
-IMultiObjectElevationFactory : public IUnknown
+	IMultiObjectElevationFactory : IUnknown
 {
-public:
-	virtual HRESULT STDMETHODCALLTYPE Initialize(HWND hwnd, GUID param) = 0;
-	virtual HRESULT STDMETHODCALLTYPE InitializeNoWaitCursor(HWND hwnd, GUID param) = 0;
-	virtual HRESULT STDMETHODCALLTYPE CreateElevatedObject(GUID param, GUID param2, void **ppv) = 0;
+	virtual HRESULT STDMETHODCALLTYPE Initialize(HWND, REFCLSID) = 0;
+	virtual HRESULT STDMETHODCALLTYPE InitializeNoWaitCursor(HWND, REFCLSID) = 0;
+	virtual HRESULT STDMETHODCALLTYPE CreateElevatedObject(REFCLSID, REFIID, void**) = 0;
 };
 
 typedef enum tagLAYOUTTYPE
@@ -199,7 +198,7 @@ HRESULT WINAPI IUnknown_QueryServiceForWebBrowserApp(IUnknown *punk, REFIID riid
 STDAPI_(BOOL) SHIsChildOrSelf(HWND hwndParent, HWND hwnd);
 
 MIDL_INTERFACE("f11cbea6-468c-4247-9726-6c75dcd1604c")
-IControlPanelPrivate : public IUnknown
+IControlPanelPrivate : IUnknown
 {
 	STDMETHOD(UpdateWowCache)(unsigned long) PURE;
 	STDMETHOD(GetWowCplInfo)(LPCWSTR, HICON *, int *) PURE;

@@ -7,7 +7,7 @@ DirectUI::IClassInfo *CNavigateButton::Class = nullptr;
 HRESULT TranslateCplCanonicalName(LPCWSTR pszCanonicalName, LPWSTR pszNamespaceName, UINT cch)
 {
 	IOpenControlPanel *pocp;
-	HRESULT hr = CoCreateInstance(CLSID_OpenControlPanel, 0, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pocp));
+	HRESULT hr = CoCreateInstance(CLSID_OpenControlPanel, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pocp));
 	if (SUCCEEDED(hr))
 	{
 		hr = pocp->GetPath(pszCanonicalName, pszNamespaceName, cch);
@@ -34,7 +34,7 @@ HRESULT CNavigateButton::Create(DirectUI::Element *pParent, DWORD *pdwDeferCooki
 
 void CNavigateButton::OnEvent(DirectUI::Event *pEvent)
 {
-	if (pEvent->nStage == GMF_BUBBLED && pEvent->uidType == DirectUI::Button::Click())
+	if (pEvent->nStage == GMF_BUBBLED && pEvent->uidType == DirectUI::Button::Click)
 	{
 		DirectUI::Value *pvShellExecute;
 		LPCWSTR pszShellExecute = GetShellExecute(&pvShellExecute);
@@ -145,7 +145,7 @@ HRESULT CNavigateButton::Register()
 		  &impShellExecuteParamsProp
 		};
 
-		hr = DirectUI::ClassInfo<CNavigateButton, CElementWithSite>::RegisterGlobal(g_hInst, L"NavigateButton", s_rgProperties, ARRAYSIZE(s_rgProperties));
+		hr = DirectUI::ClassInfo<CNavigateButton, CElementWithSite>::RegisterGlobal(g_hinst, L"NavigateButton", s_rgProperties, ARRAYSIZE(s_rgProperties));
 	}
 
 	return hr;

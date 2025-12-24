@@ -14,8 +14,8 @@
 #define CONTROLPANEL_NAMESPACE_GUID L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ControlPanel\\NameSpace\\%s"
 #define SHELL_EXT_APPROVED        L"Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved\\%s"
 
-HINSTANCE g_hInst = NULL;
-LONG g_cRefModule = 0;
+HINSTANCE g_hinst = NULL;
+LONG g_cLocks = 0;
 
 // Import from proxy.c
 extern "C"
@@ -26,19 +26,19 @@ extern "C"
 
 void DllAddRef()
 {
-	InterlockedIncrement(&g_cRefModule);
+	InterlockedIncrement(&g_cLocks);
 }
 
 void DllRelease()
 {
-	InterlockedDecrement(&g_cRefModule);
+	InterlockedDecrement(&g_cLocks);
 }
 
 STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void* lpReserved)
 {
 	if (DLL_PROCESS_ATTACH == dwReason)
 	{
-		g_hInst = hInstance;
+		g_hinst = hInstance;
 		DisableThreadLibraryCalls(hInstance);
 	}
 	return TRUE;
@@ -48,7 +48,7 @@ STDAPI DllCanUnloadNow(void)
 {
 	HRESULT proxyUnload = DllCanUnloadNow2();
 
-	HRESULT hr = g_cRefModule ? S_FALSE : proxyUnload;
+	HRESULT hr = g_cLocks ? S_FALSE : proxyUnload;
 
 	if (hr != S_OK)
 	{
@@ -148,7 +148,7 @@ STDAPI DllRegisterServer()
 
 	// Get the path and module name.
 	WCHAR szModulePathAndName[MAX_PATH];
-	GetModuleFileNameW(g_hInst, szModulePathAndName, ARRAYSIZE(szModulePathAndName));
+	GetModuleFileNameW(g_hinst, szModulePathAndName, ARRAYSIZE(szModulePathAndName));
 
 	// This will setup and register the basic ClassIDs. 
 	DWORD dwData = 0xa0000000;// SFGAO_FOLDER | SFGAO_HASSUBFOLDER | SFGAO_CANDELETE;

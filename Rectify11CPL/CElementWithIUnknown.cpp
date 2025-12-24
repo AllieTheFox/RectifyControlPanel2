@@ -2,6 +2,25 @@
 
 #include "CElementWithIUnknown.h"
 
+HRESULT CElementWithIUnknown::QueryInterface(REFIID riid, void ** ppv)
+{
+	static const QITAB qit[] =
+	{
+		{ 0 }
+	};
+	return QISearch(this, qit, riid, ppv);
+}
+
+ULONG CElementWithIUnknown::AddRef()
+{
+	return 1;
+}
+
+ULONG CElementWithIUnknown::Release()
+{
+	return 1;
+}
+
 DirectUI::IClassInfo *CElementWithIUnknown::Class = nullptr;
 
 HRESULT CElementWithIUnknown::Create(DirectUI::Element *pParent, DWORD *pdwDeferCookie, DirectUI::Element **ppElement)
@@ -22,7 +41,7 @@ DirectUI::IClassInfo *CElementWithIUnknown::GetClassInfo()
 
 HRESULT CElementWithIUnknown::Register()
 {
-	return ClassInfo<CElementWithIUnknown, DirectUI::Element>::RegisterGlobal(g_hInst, L"CElementWithIUnknown", nullptr, 0);
+	return ClassInfo<CElementWithIUnknown, DirectUI::Element>::RegisterGlobal(g_hinst, L"CElementWithIUnknown", nullptr, 0);
 }
 
 IUnknown *CElementWithIUnknown::GetUnknownFromElement(DirectUI::Element *pe)
