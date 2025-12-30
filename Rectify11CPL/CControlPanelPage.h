@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CElementWithSite.h"
+#include "undoc.h"
 
 class CControlPanelPage
     : public CElementWithSite

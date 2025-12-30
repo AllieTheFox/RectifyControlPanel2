@@ -61,12 +61,6 @@ HRESULT CFrameModule::Register()
     return hr;
 }
 
-MIDL_INTERFACE("b8c7036c-8d15-456d-84f5-82fb5b1ae6a5")
-IWrappedDUIElement : IUnknown
-{
-    STDMETHOD(GetElement)(void **) PURE;
-};
-
 HRESULT CFrameModule::SetInnerObject(IUnknown *punkInner)
 {
     DirectUI::Element::RemoveAll();
@@ -99,7 +93,69 @@ HRESULT CFrameModule::GetModuleID(LPWSTR *ppszModuleID)
     return hr;
 }
 
-template <typename TElement, int nCreate, int nActive, bool bUseShellBorderLayout>
+ElementWrapper::ElementWrapper(DirectUI::Element* pe)
+    : _cRef(1)
+    , _pe(pe)
+{
+}
+
+HRESULT ElementWrapper::QueryInterface(REFIID riid, void** ppv)
+{
+    static const QITAB qit[] =
+    {
+        QITABENT(ElementWrapper, IWrappedDUIElement),
+        { 0 },
+    };
+    return QISearch(this, qit, riid, ppv);
+}
+
+ULONG ElementWrapper::AddRef()
+{
+    return InterlockedIncrement(&_cRef);
+}
+
+ULONG ElementWrapper::Release()
+{
+    ULONG cRef = InterlockedDecrement(&_cRef);
+    if (!cRef)
+    {
+        delete this;
+    }
+    return cRef;
+}
+
+HRESULT ElementWrapper::GetElement(void** ppElement)
+{
+    *ppElement = _pe;
+    return S_OK;
+}
+
+ElementWrapper::~ElementWrapper()
+{
+    _pe->DestroyAll(false);
+    _pe->Destroy(false);
+}
+
+HRESULT CreateWrapperForElement(DirectUI::Element* pe, REFIID riid, void** ppv)
+{
+    *ppv = nullptr;
+
+    HRESULT hr = E_OUTOFMEMORY;
+    ElementWrapper* pew = new (std::nothrow) ElementWrapper(pe);
+    if (pew)
+    {
+        hr = pew->QueryInterface(riid, ppv);
+        pew->Release();
+    }
+    return hr;
+}
+
+template <
+    typename TElement,
+    int nCreate,
+    int nActive,
+    bool bUseShellBorderLayout
+>
 HRESULT FrameModule_CreateImpl(DirectUI::Element* pParent, DWORD* pdwDeferCookie, DirectUI::Element** ppElement)
 {
     *ppElement = nullptr;
