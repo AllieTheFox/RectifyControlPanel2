@@ -201,6 +201,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CControlPanelNavLink.cpp" />
+    <ClCompile Include="CControlPanelNavLinkCommand.cpp" />
     <ClCompile Include="CControlPanelNavLinks.cpp" />
     <ClCompile Include="CControlPanelPage.cpp" />
     <ClCompile Include="CElementWithIUnknown.cpp" />

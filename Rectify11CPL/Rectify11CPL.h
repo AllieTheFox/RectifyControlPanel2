@@ -28,7 +28,7 @@
 #include <functional>
 #include <filesystem>
 
-#include "..\dui70\DirectUI\DirectUI.h"
+#include "../dui70/DirectUI/DirectUI.h"
 
 using namespace DirectUI;
 using namespace std;

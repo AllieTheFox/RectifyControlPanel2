@@ -5,11 +5,11 @@
 #include <shdispid.h>
 
 CControlPanelPage::CControlPanelPage()
-	: CElementWithSite()
-	, _dwProffered(0)
-	, _dwEventToken(0)
-	, _pDispatchView(nullptr)
-	, _pPerftrackInfo(nullptr)
+    : CElementWithSite()
+    , _dwProffered(0)
+    , _dwEventToken(0)
+    , _pDispatchView(nullptr)
+    , _pPerftrackInfo(nullptr)
 {
 }
 
@@ -20,36 +20,36 @@ DEFINE_GUID(OID_OSearchControl, 0x03BFCEF0, 0xFCDD, 0x4CA9, 0xBE, 0xF4, 0x69, 0x
 
 HRESULT CControlPanelPage::LayoutInitialized()
 {
-	IServiceProvider *psp;
-	if (!_dwProffered && SUCCEEDED(v_GetSearchTargetServices(IID_PPV_ARGS(&psp))))
-	{
-		IUnknown_ProfferService(_punkSite, IID_IShellSearchTargetServices, psp, &_dwProffered);
+    IServiceProvider* psp;
+    if (!_dwProffered && SUCCEEDED(v_GetSearchTargetServices(IID_PPV_ARGS(&psp))))
+    {
+        IUnknown_ProfferService(_punkSite, IID_IShellSearchTargetServices, psp, &_dwProffered);
 
-		IShellSearchTargetServices *psts;
-		if (SUCCEEDED(psp->QueryInterface(IID_PPV_ARGS(&psts))))
-		{
-			WCHAR szPromptText[MAX_PATH];
-			IObjectProvider *pop;
-			if (SUCCEEDED(psts->GetPromptText(szPromptText, ARRAYSIZE(szPromptText)))
-				&& SUCCEEDED(IUnknown_QueryService(_punkSite, SID_SNavBar, IID_PPV_ARGS(&pop))))
-			{
-				IShellSearchControl *psc;
-				if (SUCCEEDED(pop->QueryObject(OID_OSearchControl, IID_PPV_ARGS(&psc))))
-				{
-					psc->SetCueAndTooltipText(szPromptText, nullptr);
-					psc->Release();
-				}
-				pop->Release();
-			}
-			psts->Release();
-		}
-		psp->Release();
-	}
-
-	return S_OK;
+        IShellSearchTargetServices* psts;
+        if (SUCCEEDED(psp->QueryInterface(IID_PPV_ARGS(&psts))))
+        {
+            WCHAR szPromptText[MAX_PATH];
+            IObjectProvider* pop;
+            if (SUCCEEDED(psts->GetPromptText(szPromptText, ARRAYSIZE(szPromptText)))
+                && SUCCEEDED(IUnknown_QueryService(_punkSite, SID_SNavBar, IID_PPV_ARGS(&pop))))
+            {
+                IShellSearchControl* psc;
+                if (SUCCEEDED(pop->QueryObject(OID_OSearchControl, IID_PPV_ARGS(&psc))))
+                {
+                    psc->SetCueAndTooltipText(szPromptText, nullptr);
+                    psc->Release();
+                }
+                pop->Release();
+            }
+            psts->Release();
+        }
+        psp->Release();
+    }
+    return S_OK;
 }
 
-typedef BOOL(WINAPI *SHWindowsPolicy_t)(REFGUID rpolid);
+typedef BOOL (WINAPI *SHWindowsPolicy_t)(REFGUID rpolid);
+
 BOOL SHWindowsPolicy(REFGUID rpolid)
 {
     static SHWindowsPolicy_t fn = nullptr;
@@ -66,7 +66,7 @@ BOOL SHWindowsPolicy(REFGUID rpolid)
         return fn(rpolid);
 }
 
-typedef int(WINAPI *SHStringFromGUIDW_t)(REFGUID guid, LPWSTR lpszDest, int cchMax);
+typedef int (WINAPI *SHStringFromGUIDW_t)(REFGUID guid, LPWSTR lpszDest, int cchMax);
 int SHStringFromGUIDW(REFGUID guid, LPWSTR lpszDest, int cchMax)
 {
     static SHStringFromGUIDW_t fn = nullptr;
@@ -95,7 +95,7 @@ HRESULT CControlPanelPage::Notify(LPCWSTR pszChangedProp)
 
     if (!StrCmpC(pszChangedProp, L"SearchText") && !SHWindowsPolicy(POLID_NoControlPanel))
     {
-        IPropertyBag *ppb;
+        IPropertyBag* ppb;
         hr = IUnknown_QueryService(_punkSite, IID_IFrameManager, IID_PPV_ARGS(&ppb));
         if (SUCCEEDED(hr))
         {
@@ -117,7 +117,7 @@ HRESULT CControlPanelPage::Notify(LPCWSTR pszChangedProp)
                             hr = SHParseDisplayName(szControlPanelPath, 0, &pidlControlPanel, 0, 0);
                             if (SUCCEEDED(hr))
                             {
-                                IShellBrowser *psb;
+                                IShellBrowser* psb;
                                 hr = IUnknown_QueryService(_punkSite, SID_STopLevelBrowser, IID_PPV_ARGS(&psb));
                                 if (SUCCEEDED(hr))
                                 {
@@ -141,9 +141,8 @@ HRESULT CControlPanelPage::OnNavigateAway()
 {
     if (_dwProffered)
     {
-        IUnknown_ProfferService(_punkSite, IID_IShellSearchTargetServices, 0, &_dwProffered);
+        IUnknown_ProfferService(_punkSite, IID_IShellSearchTargetServices, nullptr, &_dwProffered);
     }
-
     return S_OK;
 }
 
@@ -154,7 +153,6 @@ HRESULT CControlPanelPage::OnInnerElementDestroyed()
 
 void CControlPanelPage::LogCPLPerfTrackStopEvent()
 {
-    ;
 }
 
 HRESULT CControlPanelPage::RegisterWindowReadyEvent()
@@ -162,11 +160,11 @@ HRESULT CControlPanelPage::RegisterWindowReadyEvent()
     HRESULT hr = CControlPanelPerfTrackInfo::Create(this, &_pPerftrackInfo);
     if (SUCCEEDED(hr))
     {
-        IFrameManager *pfm;
+        IFrameManager* pfm;
         hr = IUnknown_QueryService(_punkSite, IID_IFrameManager, IID_PPV_ARGS(&pfm));
         if (SUCCEEDED(hr))
         {
-            IShellView *psv;
+            IShellView* psv;
             hr = pfm->GetShellView(&psv);
             if (SUCCEEDED(hr))
             {
@@ -180,7 +178,6 @@ HRESULT CControlPanelPage::RegisterWindowReadyEvent()
             pfm->Release();
         }
     }
-
     return hr;
 }
 
@@ -189,45 +186,42 @@ HRESULT CControlPanelPage::UnRegisterWindowReadyEvent()
     HRESULT hr = S_OK;
     if (_dwEventToken)
     {
-        hr = ConnectToConnectionPoint(_pPerftrackInfo, DIID_DShellFolderViewEvents, FALSE, _pDispatchView, &_dwEventToken, 0);
-        *&_dwEventToken = 0;
+        hr = ConnectToConnectionPoint(_pPerftrackInfo, DIID_DShellFolderViewEvents, FALSE, _pDispatchView, &_dwEventToken, nullptr);
+        _dwEventToken = 0;
     }
-
-    SafeRelease<IDispatch>(&_pDispatchView);
-    SafeRelease<IDispatch>(&_pPerftrackInfo);
-
+    SafeRelease(&_pDispatchView);
+    SafeRelease(&_pPerftrackInfo);
     return hr;
 }
 
 DEFINE_GUID(CLSID_CPLSearchTargetServices, 0x8E69E5B8, 0x893B, 0x4E67, 0xBF, 0xA2, 0x45, 0xC6, 0x7D, 0x60, 0xAC, 0x3A);
 
-HRESULT CControlPanelPage::v_GetSearchTargetServices(REFIID riid, void **ppv)
+HRESULT CControlPanelPage::v_GetSearchTargetServices(REFIID riid, void** ppv)
 {
-	return CoCreateInstance(CLSID_CPLSearchTargetServices, 0, (CLSCTX_INPROC_SERVER | CLSCTX_INPROC_HANDLER), riid, ppv);
+    return CoCreateInstance(
+        CLSID_CPLSearchTargetServices, nullptr, CLSCTX_INPROC_SERVER | CLSCTX_INPROC_HANDLER, riid, ppv);
 }
 
-HRESULT CControlPanelPerfTrackInfo::Create(CControlPanelPage *pCControlPanelPage, IDispatch **ppDisp)
+HRESULT CControlPanelPerfTrackInfo::Create(CControlPanelPage* pCControlPanelPage, IDispatch** ppDisp)
 {
     HRESULT hr = E_OUTOFMEMORY;
-    CControlPanelPerfTrackInfo *pCControlPanelPerfTrackInfo = new(std::nothrow) CControlPanelPerfTrackInfo(pCControlPanelPage);
+    CControlPanelPerfTrackInfo* pCControlPanelPerfTrackInfo = new(std::nothrow) CControlPanelPerfTrackInfo(pCControlPanelPage);
     if (pCControlPanelPerfTrackInfo)
     {
         hr = pCControlPanelPerfTrackInfo->QueryInterface(IID_PPV_ARGS(ppDisp));
         pCControlPanelPerfTrackInfo->Release();
     }
-
     return hr;
 }
 
-HRESULT CControlPanelPerfTrackInfo::QueryInterface(REFIID riid, void **ppv)
+HRESULT CControlPanelPerfTrackInfo::QueryInterface(REFIID riid, void** ppv)
 {
     static const QITAB qit[] =
     {
         QITABENT(CControlPanelPerfTrackInfo, IDispatch),
         QITABENT(CControlPanelPerfTrackInfo, IUnknown),
-        { 0 },
+        {},
     };
-
     return QISearch(this, qit, riid, ppv);
 }
 
@@ -240,26 +234,30 @@ ULONG CControlPanelPerfTrackInfo::Release()
 {
     ULONG cRef = InterlockedDecrement(&_cRef);
     if (!cRef)
+    {
         delete this;
+    }
     return cRef;
 }
 
-HRESULT CControlPanelPerfTrackInfo::GetTypeInfoCount(UINT *pctinfo)
+HRESULT CControlPanelPerfTrackInfo::GetTypeInfoCount(UINT* pctinfo)
 {
     return E_NOTIMPL;
 }
 
-HRESULT CControlPanelPerfTrackInfo::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
+HRESULT CControlPanelPerfTrackInfo::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo)
 {
     return E_NOTIMPL;
 }
 
-HRESULT CControlPanelPerfTrackInfo::GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgdispid)
+HRESULT CControlPanelPerfTrackInfo::GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames, LCID lcid, DISPID* rgdispid)
 {
     return E_NOTIMPL;
 }
 
-HRESULT CControlPanelPerfTrackInfo::Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pvarResult, EXCEPINFO *pxi, UINT *puArgErr)
+HRESULT CControlPanelPerfTrackInfo::Invoke(
+    DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pdp, VARIANT* pvarResult, EXCEPINFO* pxi,
+    UINT* puArgErr)
 {
     HRESULT hr = S_OK;
     if (dispid == DISPID_EXPLORERWINDOWREADY)
@@ -274,8 +272,14 @@ HRESULT CControlPanelPerfTrackInfo::Invoke(DISPID dispid, REFIID riid, LCID lcid
     if (pvarResult)
     {
         pvarResult->vt = VT_BOOL;
-        pvarResult->iVal = FAILED(hr) ? 0 : -1;
+        pvarResult->boolVal = FAILED(hr) ? VARIANT_FALSE : VARIANT_TRUE;
     }
 
     return hr;
+}
+
+CControlPanelPerfTrackInfo::CControlPanelPerfTrackInfo(CControlPanelPage* pCControlPanelPage)
+    : _pPage(pCControlPanelPage)
+    , _cRef(1)
+{
 }

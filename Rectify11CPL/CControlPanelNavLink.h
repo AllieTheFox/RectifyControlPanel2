@@ -2,91 +2,43 @@
 
 #include "CControlPanelNavLinkCommand.h"
 
-class CControlPanelNavLink // should be 88 bytes (0x58) in size
+class CControlPanelNavLink
 {
 public:
-	CControlPanelNavLink(CPNAV_LIST list);
-	~CControlPanelNavLink();
+    explicit CControlPanelNavLink(CPNAV_LIST list);
+    ~CControlPanelNavLink();
 
-	static HRESULT Create(CPNAV_LIST list, CControlPanelNavLink **ppLink);
+    static HRESULT Create(CPNAV_LIST list, CControlPanelNavLink** ppLink);
 
-	CPNAV_LIST GetList()
-	{
-		return _list;
-	}
+    CPNAV_LIST GetList();
 
-	HRESULT SetName(HINSTANCE hInstance, UINT nResId);
-	HRESULT SetName(LPCWSTR pszName);
-	LPWSTR GetName() { return _pszName; }
+    HRESULT SetName(HINSTANCE hInstance, UINT nResId);
+    HRESULT SetName(const WCHAR* pszName);
+    WCHAR* GetName();
 
-	HRESULT SetNameAcc(HINSTANCE hInstance, UINT nResId);
-	HRESULT SetNameAcc(LPCWSTR pszNameAcc);
+    HRESULT SetNameAcc(HINSTANCE hInstance, UINT nResId);
+    HRESULT SetNameAcc(const WCHAR* pszNameAcc);
+    WCHAR* GetNameAcc();
 
-	LPWSTR GetNameAcc()
-	{
-		return !_pszName ? _pszNameAcc : _pszName;
-	}
+    HRESULT SetIcon(HINSTANCE hInstance, int nIconId);
+    HRESULT SetIcon(HICON hIcon);
+    HICON GetIcon();
+    void SetSQMStream(DWORD dwDatapointId, DWORD cSqmStreamEntries, SQM_STREAM_ENTRY* pSqmStreamEntries);
 
-	HRESULT SetIcon(HINSTANCE hInstance, int nIconId);
-	HRESULT SetIcon(HICON hIcon);
+    HRESULT SetCommandNotify(int nLinkId);
+    HRESULT SetCommandShellEx(const WCHAR* pszCommand, const WCHAR* pszParams);
+    HRESULT SetCommandControlPanel(const WCHAR* pszApplet, const WCHAR* pszAppletPage, bool fLogRecentItems);
 
-	HICON GetIcon()
-	{
-		return CopyIcon(_hIcon);
-	}
+    CControlPanelNavLinkCommand* GetCommand();
 
-	void SetSQMStream(DWORD dwDatapointId, DWORD cSqmStreamEntries, SQM_STREAM_ENTRY *pSqmStreamEntries)
-	{
-		_cmd.SetSQMStream(dwDatapointId, cSqmStreamEntries, pSqmStreamEntries);
-	}
-
-	HRESULT SetCommandNotify(int nLinkId)
-	{
-		_cmd.SetType(CPNAV_CMDTYPE_NOTIFY);
-
-		if (nLinkId <= 0)
-			return E_INVALIDARG;
-
-		_cmd.SetId(nLinkId);
-		return S_OK;
-	}
-
-	HRESULT SetCommandShellEx(LPCWSTR pszCommand, LPCWSTR pszParams)
-	{
-		_cmd.SetType(CPNAV_CMDTYPE_SHELLEX);
-		return _cmd.SetAppletOrCommand(pszCommand, pszParams);
-	}
-
-	HRESULT SetCommandControlPanel(LPCWSTR pszApplet, LPCWSTR pszAppletPage, bool fLogRecentItems)
-	{
-		_cmd.SetType(CPNAV_CMDTYPE_CONTROLPANEL);
-
-		if (fLogRecentItems)
-			_cmd.LogRecentItems();
-
-		return _cmd.SetAppletOrCommand(pszApplet, pszAppletPage);
-	}
-
-	CControlPanelNavLinkCommand *GetCommand()
-	{
-		return _cmd.Copy();
-	}
-
-	void SetDisabled(bool fDisabled)
-	{
-		_fDisabled = fDisabled;
-	}
-
-	bool GetDisabled()
-	{
-		return _fDisabled;
-	}
+    void SetDisabled(bool fDisabled);
+    bool GetDisabled();
 
 private:
-	CPNAV_LIST _list;
-	LPWSTR _pszName;
-	LPWSTR _pszNameAcc;
-	HICON _hIcon;
-	CControlPanelNavLinkCommand _cmd;
-	bool _fDisabled;
+    CPNAV_LIST _list;
+    WCHAR* _pszName;
+    WCHAR* _pszNameAcc;
+    HICON _hIcon;
+    CControlPanelNavLinkCommand _cmd;
+    bool _fDisabled;
 };

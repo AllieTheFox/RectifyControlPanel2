@@ -5,32 +5,29 @@
 class CControlPanelNavLinks : public IUnknown
 {
 public:
-	CControlPanelNavLinks();
+    CControlPanelNavLinks();
 
-	HRESULT Add(CControlPanelNavLink *pLink);
-	HRESULT AddLinkNotify(CPNAV_LIST list, HINSTANCE hInstance, UINT nNameResId, int nLinkId, CControlPanelNavLink **ppLink);
-	HRESULT AddLinkShellEx(CPNAV_LIST list, HINSTANCE hInstance, UINT nNameResId, LPCWSTR pszCommand, LPCWSTR pszParams, CControlPanelNavLink **ppLink);
-	HRESULT AddLinkControlPanel(CPNAV_LIST list, HINSTANCE hInstance, UINT nNameResId, LPCWSTR pszApplet, LPCWSTR pszAppletPage, CControlPanelNavLink **ppLink);
+    HRESULT Add(CControlPanelNavLink* pLink);
+    HRESULT AddLinkNotify(
+        CPNAV_LIST list, HINSTANCE hInstance, UINT nNameResId, int nLinkId, CControlPanelNavLink** ppLink);
+    HRESULT AddLinkShellEx(
+        CPNAV_LIST list, HINSTANCE hInstance, UINT nNameResId, const WCHAR* pszCommand, const WCHAR* pszParams,
+        CControlPanelNavLink** ppLink);
+    HRESULT AddLinkControlPanel(
+        CPNAV_LIST list, HINSTANCE hInstance, UINT nNameResId, const WCHAR* pszApplet, const WCHAR* pszAppletPage,
+        CControlPanelNavLink** ppLink);
 
-	int GetCount()
-	{
-		return _hdpaNavLinks ? DPA_GetPtrCount(_hdpaNavLinks) : 0;
-	}
+    int GetCount();
+    HRESULT GetAt(int i, CControlPanelNavLink** ppLink);
 
-	HRESULT GetAt(int i, CControlPanelNavLink **ppLink)
-	{
-		*ppLink = (CControlPanelNavLink *)DPA_GetPtr(_hdpaNavLinks, i);
-		return *ppLink != nullptr ? S_OK : E_FAIL;
-	}
-
-	IFACEMETHOD(QueryInterface)(REFIID riid, _Out_ void **ppv) override;
-	IFACEMETHOD_(ULONG, AddRef)() override;
-	IFACEMETHOD_(ULONG, Release)() override;
+    STDMETHODIMP QueryInterface(REFIID riid, void** ppv) override;
+    STDMETHODIMP_(ULONG) AddRef() override;
+    STDMETHODIMP_(ULONG) Release() override;
 
 protected:
-	virtual ~CControlPanelNavLinks();
+    virtual ~CControlPanelNavLinks();
 
 private:
-	HDPA _hdpaNavLinks;
-	long _cRef;
+    HDPA _hdpaNavLinks;
+    LONG _cRef;
 };
