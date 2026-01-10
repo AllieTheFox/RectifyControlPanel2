@@ -116,7 +116,7 @@ EXTERN_C const IID IID_IRectifyUtil;
             /* [in] */ DWORD pMenuIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ApplyTheme( 
-            /* [in] */ LPCWSTR pThemeName) = 0;
+            /* [in] */ const WCHAR *pThemeName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InstallThemeTool( void) = 0;
         
@@ -171,7 +171,7 @@ EXTERN_C const IID IID_IRectifyUtil;
         DECLSPEC_XFGVIRT(IRectifyUtil, ApplyTheme)
         HRESULT ( STDMETHODCALLTYPE *ApplyTheme )( 
             IRectifyUtil * This,
-            /* [in] */ LPCWSTR pThemeName);
+            /* [in] */ const WCHAR *pThemeName);
         
         DECLSPEC_XFGVIRT(IRectifyUtil, InstallThemeTool)
         HRESULT ( STDMETHODCALLTYPE *InstallThemeTool )( 

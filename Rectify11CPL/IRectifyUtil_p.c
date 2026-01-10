@@ -310,9 +310,9 @@ static const IRectifyUtil_MIDL_PROC_FORMAT_STRING IRectifyUtil__MIDL_ProcFormatS
 /* 166 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 170 */	NdrFcShort( 0x7 ),	/* 7 */
 /* 172 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 174 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 174 */	NdrFcShort( 0x1a ),	/* 26 */
 /* 176 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 178 */	0x46,		/* Oi2 Flags:  clt must size, has return, has ext, */
+/* 178 */	0x44,		/* Oi2 Flags:  has return, has ext, */
 			0x2,		/* 2 */
 /* 180 */	0xa,		/* 10 */
 			0x1,		/* Ext Flags:  new corr desc, */
@@ -323,9 +323,10 @@ static const IRectifyUtil_MIDL_PROC_FORMAT_STRING IRectifyUtil__MIDL_ProcFormatS
 
 	/* Parameter pThemeName */
 
-/* 190 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
+/* 190 */	NdrFcShort( 0x148 ),	/* Flags:  in, base type, simple ref, */
 /* 192 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 194 */	NdrFcShort( 0x8 ),	/* Type Offset=8 */
+/* 194 */	0x5,		/* FC_WCHAR */
+			0x0,		/* 0 */
 
 	/* Return value */
 
@@ -399,8 +400,7 @@ static const IRectifyUtil_MIDL_TYPE_FORMAT_STRING IRectifyUtil__MIDL_TypeFormatS
 			0x5c,		/* FC_PAD */
 /*  6 */	
 			0x11, 0x8,	/* FC_RP [simple_pointer] */
-/*  8 */	
-			0x25,		/* FC_C_WSTRING */
+/*  8 */	0x5,		/* FC_WCHAR */
 			0x5c,		/* FC_PAD */
 
 			0x0
@@ -485,7 +485,7 @@ __midl_frag25_t;
 extern const __midl_frag25_t __midl_frag25;
 
 typedef 
-struct _NDR64_CONFORMANT_STRING_FORMAT
+NDR64_FORMAT_CHAR
 __midl_frag21_t;
 extern const __midl_frag21_t __midl_frag21;
 
@@ -600,31 +600,13 @@ static const __midl_frag25_t __midl_frag25 =
 };
 
 static const __midl_frag21_t __midl_frag21 =
-{ 
-/* *WCHAR */
-    { 
-    /* *WCHAR */
-        0x64,    /* FC64_CONF_WCHAR_STRING */
-        { 
-        /* *WCHAR */
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-        },
-        (NDR64_UINT16) 2 /* 0x2 */
-    }
-};
+0x11    /* FC64_WCHAR */;
 
 static const __midl_frag20_t __midl_frag20 =
 { 
 /* *WCHAR */
     0x20,    /* FC64_RP */
-    (NDR64_UINT8) 0 /* 0x0 */,
+    (NDR64_UINT8) 8 /* 0x8 */,
     (NDR64_UINT16) 0 /* 0x0 */,
     &__midl_frag21
 };
@@ -634,9 +616,9 @@ static const __midl_frag19_t __midl_frag19 =
 /* ApplyTheme */
     { 
     /* ApplyTheme */      /* procedure ApplyTheme */
-        (NDR64_UINT32) 786755 /* 0xc0143 */,    /* auto handle */ /* IsIntrepreted, [object], ClientMustSize, HasReturn */
+        (NDR64_UINT32) 524611 /* 0x80143 */,    /* auto handle */ /* IsIntrepreted, [object], HasReturn */
         (NDR64_UINT32) 24 /* 0x18 */ ,  /* Stack size */
-        (NDR64_UINT32) 0 /* 0x0 */,
+        (NDR64_UINT32) 30 /* 0x1e */,
         (NDR64_UINT32) 8 /* 0x8 */,
         (NDR64_UINT16) 0 /* 0x0 */,
         (NDR64_UINT16) 0 /* 0x0 */,
@@ -648,13 +630,13 @@ static const __midl_frag19_t __midl_frag19 =
         &__midl_frag21,
         { 
         /* pThemeName */
+            0,
+            0,
+            0,
             1,
+            0,
+            0,
             1,
-            0,
-            1,
-            0,
-            0,
-            0,
             0,
             1,
             0,
@@ -663,7 +645,7 @@ static const __midl_frag19_t __midl_frag19 =
             0,
             (NDR64_UINT16) 0 /* 0x0 */,
             0
-        },    /* MustSize, MustFree, [in], SimpleRef */
+        },    /* [in], Basetype, SimpleRef */
         (NDR64_UINT16) 0 /* 0x0 */,
         8 /* 0x8 */,   /* Stack offset */
     },

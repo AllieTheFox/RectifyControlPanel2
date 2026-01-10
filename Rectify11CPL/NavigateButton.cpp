@@ -355,6 +355,21 @@ void CNavigateButton::_Execute()
     pvShellExecute->Release();
 }
 
+HRESULT CNavigateButton::QueryInterface(const IID& riid, void** ppv)
+{
+    return CElementWithSite::QueryInterface(riid, ppv);
+}
+
+ULONG CNavigateButton::AddRef()
+{
+    return CElementWithSite::AddRef();
+}
+
+ULONG CNavigateButton::Release()
+{
+    return CElementWithSite::Release();
+}
+
 // TODO: Find typed version of this function
 HRESULT CNavigateButton::SetNavigationTarget(const WCHAR* pszTargetRoot, const WCHAR* pszTargetRelative)
 {
