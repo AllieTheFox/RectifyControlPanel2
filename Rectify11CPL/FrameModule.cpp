@@ -32,6 +32,18 @@ HRESULT CFrameModule::Create(DirectUI::Element *pParent, DWORD *pdwDeferCookie, 
 	return E_NOTIMPL;
 }
 
+static DirectUI::_StaticValuePtr* WINAPI svDefault()
+{
+    static DirectUI::_StaticValuePtr value
+    {
+        /*_dType*/ (int)DirectUI::ValueType::String,
+        /*_fWeakRef*/ FALSE,
+        /*_cRef*/ -1,
+        /*_ptr*/ (void*)L""
+    };
+    return &value;
+}
+
 static DirectUI::PropertyInfoData dataimpModuleIDProp;
 static const int vvimpModuleIDProp[] = { 5, -1 };
 static const DirectUI::PropertyInfo impModuleIDProp =
@@ -41,7 +53,7 @@ static const DirectUI::PropertyInfo impModuleIDProp =
   .fGroups = DirectUI::PG_None,
   .pValidValues = vvimpModuleIDProp,
   .pEnumMaps = nullptr,
-  .DefaultProc = (DefaultValueProcT)&svShellExecuteVerb,
+  .DefaultProc = (DefaultValueProcT)svDefault,
   .pData = &dataimpModuleIDProp
 };
 
