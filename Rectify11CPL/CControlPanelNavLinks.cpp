@@ -87,7 +87,7 @@ HRESULT CControlPanelNavLinks::AddLinkNotify(
 }
 
 HRESULT CControlPanelNavLinks::AddLinkShellEx(
-    CPNAV_LIST list, HINSTANCE hInstance, UINT nNameResId, LPCWSTR pszCommand, LPCWSTR pszParams,
+    CPNAV_LIST list, HINSTANCE hInstance, UINT nNameResId, const WCHAR* pszCommand, const WCHAR* pszParams,
     CControlPanelNavLink** ppLink)
 {
     if (ppLink)
@@ -123,7 +123,7 @@ HRESULT CControlPanelNavLinks::AddLinkShellEx(
 }
 
 HRESULT CControlPanelNavLinks::AddLinkControlPanel(
-    CPNAV_LIST list, HINSTANCE hInstance, UINT nNameResId, LPCWSTR pszApplet, LPCWSTR pszAppletPage,
+    CPNAV_LIST list, HINSTANCE hInstance, UINT nNameResId, const WCHAR* pszApplet, const WCHAR* pszAppletPage,
     CControlPanelNavLink** ppLink)
 {
     if (ppLink)

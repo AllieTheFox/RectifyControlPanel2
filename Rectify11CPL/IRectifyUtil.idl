@@ -21,7 +21,7 @@ interface IRectifyUtil : IUnknown
     HRESULT SetCurrentMenuByIndex([in] DWORD pMenuIndex);
 
     // Utilities for rectify 11 installer
-    HRESULT ApplyTheme([in] LPCWSTR pThemeName);
+    HRESULT ApplyTheme([in] const WCHAR* pThemeName);
     HRESULT InstallThemeTool();
     HRESULT UninstallThemeTool();
 }

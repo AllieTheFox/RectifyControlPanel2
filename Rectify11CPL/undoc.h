@@ -30,7 +30,7 @@ IFrameNotificationClient : public IUnknown
 {
 public:
 	virtual HRESULT STDMETHODCALLTYPE LayoutInitialized() = 0;
-	virtual HRESULT STDMETHODCALLTYPE Notify(LPCWSTR pszChangedProp) = 0;
+	virtual HRESULT STDMETHODCALLTYPE Notify(const WCHAR* pszChangedProp) = 0;
 	virtual HRESULT STDMETHODCALLTYPE OnNavigateAway() = 0;
 	virtual HRESULT STDMETHODCALLTYPE OnInnerElementDestroyed() = 0;
 };
@@ -108,7 +108,7 @@ MIDL_INTERFACE("31E4FA78-02B4-419F-9430-7B7585237C77")
 IFrameManager : ILayoutType
 {
 	STDMETHOD(GetShellView)(IShellView **) PURE;
-	STDMETHOD(GetPersistStream)(int, LPCWSTR, LPCWSTR, ULONG, IStream **) PURE;
+	STDMETHOD(GetPersistStream)(int, const WCHAR*, const WCHAR*, ULONG, IStream **) PURE;
 };
 
 enum SEARCHTARGETFLAGS
@@ -179,12 +179,12 @@ IShellSearchControl : IUnknown
 	STDMETHOD(SetPopupFlags)(SEARCH_BOX_SUGGEST_POPUP_SETTING) PURE;
 	STDMETHOD(GetFlags)(SSCSTATEFLAGS *) PURE;
 	STDMETHOD(SetMRULocation)(REFGUID) PURE;
-	STDMETHOD(SetCueAndTooltipText)(LPCWSTR, LPCWSTR) PURE;
+	STDMETHOD(SetCueAndTooltipText)(const WCHAR*, const WCHAR*) PURE;
 	STDMETHOD(SetLocation)(IShellItem *) PURE;
 	STDMETHOD(GetDesiredSize)(SIZE *) PURE;
 	STDMETHOD(UpdateWidth)(int, SSC_WIDTH_FLAGS) PURE;
-	STDMETHOD(GetText)(LPWSTR, UINT) PURE;
-	STDMETHOD(SetText)(LPCWSTR, SSCTEXTFLAGS) PURE;
+	STDMETHOD(GetText)(WCHAR*, UINT) PURE;
+	STDMETHOD(SetText)(const WCHAR*, SSCTEXTFLAGS) PURE;
 	STDMETHOD(DoesEditBoxHaveFocus)(BOOL *) PURE;
 	STDMETHOD(HasSuggestions)() PURE;
 	STDMETHOD(HideSuggestions)() PURE;

@@ -13,8 +13,8 @@ typedef HRESULT(FAR WINAPI* ThemeDll_themetool_set_active)(HWND parent,
 	BOOLEAN apply_now_not_only_registry,
 	ULONG apply_flags,
 	ULONG pack_flags);
-typedef HRESULT(FAR WINAPI* ThemeDll_themetool_theme_get_display_name)(ITheme* theme, LPWSTR out, SIZE_T cch);
-typedef HRESULT(FAR WINAPI* ThemeDll_themetool_theme_get_vs_path)(ITheme* theme, LPWSTR out, SIZE_T cch);
+typedef HRESULT(FAR WINAPI* ThemeDll_themetool_theme_get_display_name)(ITheme* theme, WCHAR* out, SIZE_T cch);
+typedef HRESULT(FAR WINAPI* ThemeDll_themetool_theme_get_vs_path)(ITheme* theme, WCHAR* out, SIZE_T cch);
 typedef void(FAR WINAPI* ThemeDll_themetool_theme_release)(ITheme* theme);
 typedef HRESULT(FAR WINAPI* ThemeDll_themetool_install)(ULONG flags);
 typedef HRESULT(FAR WINAPI* ThemeDll_themetool_uninstall)();
@@ -146,7 +146,7 @@ HRESULT themetool_set_active(
 }
 
 
-HRESULT themetool_theme_get_display_name(ITheme* theme, LPWSTR out, SIZE_T cch)
+HRESULT themetool_theme_get_display_name(ITheme* theme, WCHAR* out, SIZE_T cch)
 {
 	HRESULT hr = loadThemeDll();
 	if (FAILED(hr))
@@ -165,7 +165,7 @@ HRESULT themetool_theme_get_display_name(ITheme* theme, LPWSTR out, SIZE_T cch)
 	return hr;
 }
 
-HRESULT themetool_theme_get_vs_path(ITheme* theme, LPWSTR out, SIZE_T cch)
+HRESULT themetool_theme_get_vs_path(ITheme* theme, WCHAR* out, SIZE_T cch)
 {
 	HRESULT hr = loadThemeDll();
 	if (FAILED(hr))

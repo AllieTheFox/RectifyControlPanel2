@@ -48,14 +48,14 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 	if (_fInitializing)
 		return;
 
-	if (iev->peTarget->GetID() == DirectUI::StrToID((LPCWSTR)L"Link_EnableAdmin"))
+	if (iev->peTarget->GetID() == DirectUI::StrToID(L"Link_EnableAdmin"))
 	{
 		if (iev->uidType == DirectUI::TouchButton::Click)
 		{
 			IRectifyUtil *utility = ElevationManager::Initialize(_GetMainHwnd());
-			DirectUI::TouchCheckBox *MicaForEveryoneCheckbox = (DirectUI::TouchCheckBox *)FindDescendent(DirectUI::StrToID((LPCWSTR)L"MicaChk"));
-			DirectUI::TouchCheckBox *TabbedCheckbox = (DirectUI::TouchCheckBox *)FindDescendent(DirectUI::StrToID((LPCWSTR)L"TabChk"));
-			DirectUI::TouchButton *ThemetoolInstall = (DirectUI::TouchButton *)FindDescendent(DirectUI::StrToID((LPCWSTR)L"ThemetoolInstall"));
+			DirectUI::TouchCheckBox *MicaForEveryoneCheckbox = (DirectUI::TouchCheckBox *)FindDescendent(DirectUI::StrToID(L"MicaChk"));
+			DirectUI::TouchCheckBox *TabbedCheckbox = (DirectUI::TouchCheckBox *)FindDescendent(DirectUI::StrToID(L"TabChk"));
+			DirectUI::TouchButton *ThemetoolInstall = (DirectUI::TouchButton *)FindDescendent(DirectUI::StrToID(L"ThemetoolInstall"));
 			if (utility != NULL)
 			{
 				// Destroy old class
@@ -78,11 +78,11 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 					TabbedCheckbox->SetEnabled(TRUE);
 
 
-				DirectUI::CCRadioButton *Win11DefaultMenus = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID((LPCWSTR)L"Win11DefaultMenus"));
-				DirectUI::CCRadioButton *NilesoftSmall = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID((LPCWSTR)L"NilesoftSmall"));
-				DirectUI::CCRadioButton *NilesoftFull = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID((LPCWSTR)L"NilesoftFull"));
-				DirectUI::CCRadioButton *Classic = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID((LPCWSTR)L"Classic"));
-				DirectUI::CCRadioButton *ClassicTransparent = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID((LPCWSTR)L"ClassicTransparent"));
+				DirectUI::CCRadioButton *Win11DefaultMenus = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID(L"Win11DefaultMenus"));
+				DirectUI::CCRadioButton *NilesoftSmall = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID(L"NilesoftSmall"));
+				DirectUI::CCRadioButton *NilesoftFull = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID(L"NilesoftFull"));
+				DirectUI::CCRadioButton *Classic = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID(L"Classic"));
+				DirectUI::CCRadioButton *ClassicTransparent = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID(L"ClassicTransparent"));
 
 				DirectUI::CCRadioButton *Options[] =
 				{
@@ -102,7 +102,7 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 			}
 		}
 	}
-	else if (iev->peTarget->GetID() == DirectUI::StrToID((LPCWSTR)L"BtnRestartExplorer"))
+	else if (iev->peTarget->GetID() == DirectUI::StrToID(L"BtnRestartExplorer"))
 	{
 		if (iev->uidType == DirectUI::TouchButton::Click)
 		{
@@ -113,12 +113,12 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 			iev->peTarget->SetVisible(FALSE);
 		}
 	}
-	else if (iev->peTarget->GetID() == DirectUI::StrToID((LPCWSTR)L"ThemeCmb"))
+	else if (iev->peTarget->GetID() == DirectUI::StrToID(L"ThemeCmb"))
 	{
 		if (iev->uidType == DirectUI::Combobox::SelectionChange)
 		{
-			DirectUI::TouchCheckBox *MicaForEveryoneCheckbox = (DirectUI::TouchCheckBox *)FindDescendent(DirectUI::StrToID((LPCWSTR)L"MicaChk"));
-			DirectUI::TouchCheckBox *TabbedCheckbox = (DirectUI::TouchCheckBox *)FindDescendent(DirectUI::StrToID((LPCWSTR)L"TabChk"));
+			DirectUI::TouchCheckBox *MicaForEveryoneCheckbox = (DirectUI::TouchCheckBox *)FindDescendent(DirectUI::StrToID(L"MicaChk"));
+			DirectUI::TouchCheckBox *TabbedCheckbox = (DirectUI::TouchCheckBox *)FindDescendent(DirectUI::StrToID(L"TabChk"));
 			int selection = ((DirectUI::Combobox *)iev->peTarget)->GetSelection();
 
 			ULONG apply_flags = 0;
@@ -191,18 +191,18 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 			}
 		}
 	}
-	else if (iev->peTarget->GetID() == DirectUI::StrToID((LPCWSTR)L"buttonHelp"))
+	else if (iev->peTarget->GetID() == DirectUI::StrToID(L"buttonHelp"))
 	{
 		if (iev->uidType == DirectUI::Button::Click)
 		{
 			ShellExecute(0, 0, TEXT("http://rectify11.net"), 0, 0, SW_SHOW);
 		}
 	}
-	else if (iev->peTarget->GetID() == DirectUI::StrToID((LPCWSTR)L"MicaChk"))
+	else if (iev->peTarget->GetID() == DirectUI::StrToID(L"MicaChk"))
 	{
 		DirectUI::TouchCheckBox *MicaForEveryoneCheckbox = (DirectUI::TouchCheckBox *)iev->peTarget;
-		DirectUI::TouchCheckBox *TabbedCheckbox = (DirectUI::TouchCheckBox *)GetRoot()->FindDescendent(DirectUI::StrToID((LPCWSTR)L"TabChk"));
-		DirectUI::Combobox *ThemeCombo = (DirectUI::Combobox *)GetRoot()->FindDescendent(DirectUI::StrToID((LPCWSTR)L"ThemeCmb"));
+		DirectUI::TouchCheckBox *TabbedCheckbox = (DirectUI::TouchCheckBox *)GetRoot()->FindDescendent(DirectUI::StrToID(L"TabChk"));
+		DirectUI::Combobox *ThemeCombo = (DirectUI::Combobox *)GetRoot()->FindDescendent(DirectUI::StrToID(L"ThemeCmb"));
 		if (iev->uidType == DirectUI::TouchButton::Click)
 		{
 			DirectUI::CheckedStateFlags MicaEnabled2 = MicaForEveryoneCheckbox->GetCheckedState();
@@ -217,17 +217,17 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 			}
 		}
 	}
-	else if (iev->peTarget->GetID() == DirectUI::StrToID((LPCWSTR)L"TabChk"))
+	else if (iev->peTarget->GetID() == DirectUI::StrToID(L"TabChk"))
 	{
 		DirectUI::TouchCheckBox *TabbedCheckbox = (DirectUI::TouchCheckBox *)iev->peTarget;
-		DirectUI::Combobox *ThemeCombo = (DirectUI::Combobox *)FindDescendent(DirectUI::StrToID((LPCWSTR)L"ThemeCmb"));
+		DirectUI::Combobox *ThemeCombo = (DirectUI::Combobox *)FindDescendent(DirectUI::StrToID(L"ThemeCmb"));
 
 		if (iev->uidType == DirectUI::TouchButton::Click)
 		{
 			_pRectifyUtil->SetMicaForEveryoneEnabled(TRUE, TabbedCheckbox->GetCheckedState() == DirectUI::CSF_Checked ? TRUE : FALSE);
 		}
 	}
-	else if (iev->peTarget->GetID() == DirectUI::StrToID((LPCWSTR)L"ThemetoolInstall"))
+	else if (iev->peTarget->GetID() == DirectUI::StrToID(L"ThemetoolInstall"))
 	{
 		iev->peTarget->SetEnabled(FALSE);
 		HRESULT hr = _pRectifyUtil->InstallThemeTool();
@@ -250,23 +250,23 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 		if (chkbox->GetSelected())
 		{
 			HRESULT hr = E_ACTIVATIONDENIED_SHELLERROR;
-			if (chkbox->GetID() == DirectUI::StrToID((LPCWSTR)L"Win11DefaultMenus"))
+			if (chkbox->GetID() == DirectUI::StrToID(L"Win11DefaultMenus"))
 			{
 				hr = _pRectifyUtil->SetCurrentMenuByIndex(Normal);
 			}
-			else if (chkbox->GetID() == DirectUI::StrToID((LPCWSTR)L"NilesoftSmall"))
+			else if (chkbox->GetID() == DirectUI::StrToID(L"NilesoftSmall"))
 			{
 				hr = _pRectifyUtil->SetCurrentMenuByIndex(NilesoftSmall);
 			}
-			else if (chkbox->GetID() == DirectUI::StrToID((LPCWSTR)L"NilesoftFull"))
+			else if (chkbox->GetID() == DirectUI::StrToID(L"NilesoftFull"))
 			{
 				hr = _pRectifyUtil->SetCurrentMenuByIndex(NilesoftFull);
 			}
-			else if (chkbox->GetID() == DirectUI::StrToID((LPCWSTR)L"Classic"))
+			else if (chkbox->GetID() == DirectUI::StrToID(L"Classic"))
 			{
 				hr = _pRectifyUtil->SetCurrentMenuByIndex(Classic);
 			}
-			else if (chkbox->GetID() == DirectUI::StrToID((LPCWSTR)L"ClassicTransparent"))
+			else if (chkbox->GetID() == DirectUI::StrToID(L"ClassicTransparent"))
 			{
 				hr = _pRectifyUtil->SetCurrentMenuByIndex(ClassicTransparent);
 			}
@@ -287,21 +287,21 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 
 void RectifyMainPage::_ShowRestartExplorer()
 {
-	DirectUI::TouchButton *BtnRestartExplorer = (DirectUI::TouchButton *)FindDescendent(DirectUI::StrToID((LPCWSTR)L"BtnRestartExplorer"));
+	DirectUI::TouchButton *BtnRestartExplorer = (DirectUI::TouchButton *)FindDescendent(DirectUI::StrToID(L"BtnRestartExplorer"));
 	BtnRestartExplorer->SetLayoutPos(0);
 	BtnRestartExplorer->SetVisible(TRUE);
 }
 
 void RectifyMainPage::_UpdateThemeGraphic()
 {
-	LPCWSTR id = IsDarkTheme() ? MAKEINTRESOURCE(IDB_DARKPREVIEW) : MAKEINTRESOURCE(IDB_LIGHTPREVIEW);
+	const WCHAR* id = IsDarkTheme() ? MAKEINTRESOURCE(IDB_DARKPREVIEW) : MAKEINTRESOURCE(IDB_LIGHTPREVIEW);
 	HBITMAP bmp = (HBITMAP)LoadImage(g_hinst, id, IMAGE_BITMAP, 256, 256, 0);
 	if (bmp == NULL)
 	{
 		return;
 	}
 	DirectUI::Value *bitmap = DirectUI::Value::CreateGraphic(bmp, 3, 0xffffffff, false, false, false);
-	Element *PreviewElement = FindDescendent(DirectUI::StrToID((LPCWSTR)L"ThemePreview"));
+	Element *PreviewElement = FindDescendent(DirectUI::StrToID(L"ThemePreview"));
 	if (PreviewElement != NULL)
 	{
 		PreviewElement->SetValue(Element::ContentProp, 1, bitmap);
@@ -344,7 +344,7 @@ HRESULT RectifyMainPage::_InitNavLinks()
 
 void RectifyMainPage::_UpdateThemetoolStatus()
 {
-	Element *status = (DirectUI::TouchButton *)FindDescendent(DirectUI::StrToID((LPCWSTR)L"ThemetoolStatus"));
+	Element *status = (DirectUI::TouchButton *)FindDescendent(DirectUI::StrToID(L"ThemetoolStatus"));
 
 	ULONG flags = secureuxtheme_get_state_flags();
 	wstring statusText;
@@ -393,7 +393,7 @@ void RectifyMainPage::_UpdateThemetoolStatus()
 		status->SetForegroundStdColor(113); // red
 	}
 
-	status->SetContentString((LPCWSTR)statusText.c_str());
+	status->SetContentString(statusText.c_str());
 }
 
 IFACEMETHODIMP RectifyMainPage::QueryInterface(REFIID riid, void **ppv)
@@ -435,20 +435,20 @@ HRESULT RectifyMainPage::LayoutInitialized()
 	_pRectifyUtil = (IRectifyUtil *)new CRectifyUtil();
 	_InitNavLinks();
 
-	DirectUI::Combobox *ThemeCombo = (DirectUI::Combobox *)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"ThemeCmb"));
-	DirectUI::Button *HelpButton = (DirectUI::Button *)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"buttonHelp"));
-	DirectUI::TouchCheckBox *MicaForEveryoneCheckbox = (DirectUI::TouchCheckBox *)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"MicaChk"));
-	DirectUI::TouchCheckBox *TabbedCheckbox = (DirectUI::TouchCheckBox *)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"TabChk"));
-	Element *version = root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"RectifyVersion"));
-	DirectUI::TouchButton *enableAdmin = (DirectUI::TouchButton *)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"Link_EnableAdmin"));
-	DirectUI::TouchButton *BtnRestartExplorer = (DirectUI::TouchButton *)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"BtnRestartExplorer"));
-	DirectUI::TouchButton *ThemetoolInstall = (DirectUI::TouchButton *)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"ThemetoolInstall"));
+	DirectUI::Combobox *ThemeCombo = (DirectUI::Combobox *)root->FindDescendent(DirectUI::StrToID(L"ThemeCmb"));
+	DirectUI::Button *HelpButton = (DirectUI::Button *)root->FindDescendent(DirectUI::StrToID(L"buttonHelp"));
+	DirectUI::TouchCheckBox *MicaForEveryoneCheckbox = (DirectUI::TouchCheckBox *)root->FindDescendent(DirectUI::StrToID(L"MicaChk"));
+	DirectUI::TouchCheckBox *TabbedCheckbox = (DirectUI::TouchCheckBox *)root->FindDescendent(DirectUI::StrToID(L"TabChk"));
+	Element *version = root->FindDescendent(DirectUI::StrToID(L"RectifyVersion"));
+	DirectUI::TouchButton *enableAdmin = (DirectUI::TouchButton *)root->FindDescendent(DirectUI::StrToID(L"Link_EnableAdmin"));
+	DirectUI::TouchButton *BtnRestartExplorer = (DirectUI::TouchButton *)root->FindDescendent(DirectUI::StrToID(L"BtnRestartExplorer"));
+	DirectUI::TouchButton *ThemetoolInstall = (DirectUI::TouchButton *)root->FindDescendent(DirectUI::StrToID(L"ThemetoolInstall"));
 
-	DirectUI::CCRadioButton *Win11DefaultMenus = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"Win11DefaultMenus"));
-	DirectUI::CCRadioButton *NilesoftSmall = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"NilesoftSmall"));
-	DirectUI::CCRadioButton *NilesoftFull = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"NilesoftFull"));
-	DirectUI::CCRadioButton *Classic = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"Classic"));
-	DirectUI::CCRadioButton *ClassicTransparent = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"ClassicTransparent"));
+	DirectUI::CCRadioButton *Win11DefaultMenus = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID(L"Win11DefaultMenus"));
+	DirectUI::CCRadioButton *NilesoftSmall = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID(L"NilesoftSmall"));
+	DirectUI::CCRadioButton *NilesoftFull = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID(L"NilesoftFull"));
+	DirectUI::CCRadioButton *Classic = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID(L"Classic"));
+	DirectUI::CCRadioButton *ClassicTransparent = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID(L"ClassicTransparent"));
 
 	DirectUI::CCRadioButton *Options[] = { Win11DefaultMenus, NilesoftSmall, NilesoftFull, Classic, ClassicTransparent };
 
@@ -458,7 +458,7 @@ HRESULT RectifyMainPage::LayoutInitialized()
 		PVOID pvData = value;
 		DWORD size = sizeof(value);
 		RegGetValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager", L"DllName", RRF_RT_REG_SZ, 0, pvData, &size);
-		std::wstring msstylePath = std::wstring((LPCWSTR)pvData);
+		std::wstring msstylePath = std::wstring((const WCHAR*)pvData);
 		int k = 0;
 		ULONG themeCount = 0;
 		if (SUCCEEDED(themetool_get_theme_count(&themeCount)))
@@ -473,10 +473,10 @@ HRESULT RectifyMainPage::LayoutInitialized()
 
 					if (nameBuffer.starts_with(L"Rectify11"))
 					{
-						ThemeCombo->AddString((LPWSTR)nameBuffer.c_str());
+						ThemeCombo->AddString(nameBuffer.c_str());
 						std::wstring pathBuff = std::wstring();
 						theme->GetVisualStyle(pathBuff);
-						std::wstring msstylePath = std::wstring((LPCWSTR)pvData);
+						std::wstring msstylePath = std::wstring((const WCHAR*)pvData);
 
 						std::wstring msstylePathClean = msstylePath;
 
@@ -547,7 +547,7 @@ HRESULT RectifyMainPage::LayoutInitialized()
 				vstr += L" ";
 				vstr += notapplicable;
 			}
-			version->SetContentString((LPCWSTR)vstr.c_str());
+			version->SetContentString(vstr.c_str());
 		}
 	}
 
@@ -626,11 +626,11 @@ HWND RectifyMainPage::_GetMainHwnd()
 {
 	GUID SID_STopLevelBrowser = {};
 	IID IID_IFrameManager = {};
-	HRESULT hr = CLSIDFromString(L"{4c96be40-915c-11cf-99d3-00aa004ae837}", (LPCLSID)&SID_STopLevelBrowser);
+	HRESULT hr = CLSIDFromString(L"{4c96be40-915c-11cf-99d3-00aa004ae837}", &SID_STopLevelBrowser);
 	HWND result = NULL;
 	if (SUCCEEDED(hr))
 	{
-		hr = CLSIDFromString(L"{31e4fa78-02b4-419f-9430-7b7585237c77}", (LPCLSID)&IID_IFrameManager);
+		hr = CLSIDFromString(L"{31e4fa78-02b4-419f-9430-7b7585237c77}", &IID_IFrameManager);
 		if (SUCCEEDED(hr))
 		{
 			IShellBrowser *browser = NULL;

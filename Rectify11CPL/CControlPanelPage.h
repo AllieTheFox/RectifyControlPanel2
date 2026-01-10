@@ -12,7 +12,7 @@ public:
 
     //~ Begin IFrameNotificationClient Interface
     STDMETHODIMP LayoutInitialized() override;
-    STDMETHODIMP Notify(LPCWSTR pszChangedProp) override;
+    STDMETHODIMP Notify(const WCHAR* pszChangedProp) override;
     STDMETHODIMP OnNavigateAway() override;
     STDMETHODIMP OnInnerElementDestroyed() override;
     //~ End IFrameNotificationClient Interface

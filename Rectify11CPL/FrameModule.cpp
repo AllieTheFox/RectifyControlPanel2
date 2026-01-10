@@ -97,9 +97,9 @@ HRESULT CFrameModule::SetInnerObject(IUnknown *punkInner)
     return hr;
 }
 
-HRESULT CFrameModule::GetModuleID(LPWSTR *ppszModuleID)
+HRESULT CFrameModule::GetModuleID(WCHAR** ppszModuleID)
 {
-    DirectUI::Value *pv = DirectUI::Element::GetValue(&impModuleIDProp, 2, nullptr);
+    DirectUI::Value* pv = DirectUI::Element::GetValue(&impModuleIDProp, 2, nullptr);
     HRESULT hr = SHStrDup(pv->GetString(), ppszModuleID);
     pv->Release();
     return hr;

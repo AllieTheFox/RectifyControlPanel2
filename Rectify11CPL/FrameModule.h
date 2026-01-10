@@ -8,7 +8,7 @@ IFrameModule : IUnknown
 {
     STDMETHOD(CreateInnerObject)(IUnknown **ppunkInner) PURE;
     STDMETHOD(SetInnerObject)(IUnknown *punkInner) PURE;
-    STDMETHOD(GetModuleID)(LPWSTR *ppszModuleID) PURE;
+    STDMETHOD(GetModuleID)(WCHAR* *ppszModuleID) PURE;
 };
 
 class CFrameModule
@@ -30,7 +30,7 @@ public:
 	// == Begin IFrameModule Interface ==
     IFACEMETHODIMP CreateInnerObject(IUnknown **ppunkInner) PURE;
     IFACEMETHODIMP SetInnerObject(IUnknown *punkInner);
-    IFACEMETHODIMP GetModuleID(LPWSTR *ppszModuleID);
+    IFACEMETHODIMP GetModuleID(WCHAR* *ppszModuleID);
 	// == End IFrameModule Interface ==
 };
 

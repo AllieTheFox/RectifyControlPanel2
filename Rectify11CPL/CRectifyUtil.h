@@ -23,7 +23,7 @@ public:
 	virtual HRESULT GetCurrentMenuIndex(DWORD* menuIndex);
 	virtual HRESULT SetCurrentMenuByIndex(DWORD pIndex);
 
-	virtual HRESULT ApplyTheme(LPCWSTR pThemeName);
+	virtual HRESULT ApplyTheme(const WCHAR* pThemeName);
 	virtual HRESULT InstallThemeTool();
 	virtual HRESULT UninstallThemeTool();
 

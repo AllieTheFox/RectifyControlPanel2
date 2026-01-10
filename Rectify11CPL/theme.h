@@ -38,12 +38,12 @@ struct ISlideshowSettings;
 struct ITheme : IUnknown
 {
 private:
-	virtual HRESULT WINAPI get_DisplayName(LPWSTR*) = 0;
-	virtual HRESULT WINAPI put_DisplayName(LPWSTR) = 0;
-	virtual HRESULT WINAPI get_VisualStyle(LPWSTR*) = 0;  // win8: get_ScreenSaver(LPWSTR*)
-	virtual HRESULT WINAPI put_VisualStyle(LPWSTR) = 0;   // win8: set_ScreenSaver(LPWSTR)
-	virtual HRESULT WINAPI get_VisualStyle2(LPWSTR*) = 0; // 1903: get_VisualStyleColor(LPWSTR*)
-	virtual HRESULT WINAPI put_VisualStyle2(LPWSTR) = 0;  // 1903: put_VisualStyleColor(LPWSTR)
+	virtual HRESULT WINAPI get_DisplayName(WCHAR**) = 0;
+	virtual HRESULT WINAPI put_DisplayName(WCHAR*) = 0;
+	virtual HRESULT WINAPI get_VisualStyle(WCHAR**) = 0;  // win8: get_ScreenSaver(WCHAR**)
+	virtual HRESULT WINAPI put_VisualStyle(WCHAR*) = 0;   // win8: set_ScreenSaver(WCHAR*)
+	virtual HRESULT WINAPI get_VisualStyle2(WCHAR**) = 0; // 1903: get_VisualStyleColor(WCHAR**)
+	virtual HRESULT WINAPI put_VisualStyle2(WCHAR*) = 0;  // 1903: put_VisualStyleColor(WCHAR*)
 
 	// see "re" folder for full vtables
 
@@ -51,14 +51,14 @@ public:
 	HRESULT GetDisplayName(std::wstring& name)
 	{
 		name.clear();
-		LPWSTR lpwstr = nullptr;
-		auto hr = get_DisplayName(&lpwstr);
-		if (SUCCEEDED(hr) && lpwstr)
+		WCHAR* WCHAR* = nullptr;
+		auto hr = get_DisplayName(&WCHAR*);
+		if (SUCCEEDED(hr) && WCHAR*)
 		{
-			if (lpwstr)
+			if (WCHAR*)
 			{
-				name = lpwstr;
-				SysFreeString(lpwstr);
+				name = WCHAR*;
+				SysFreeString(WCHAR*);
 			}
 			else
 			{
@@ -72,39 +72,39 @@ public:
 	HRESULT GetVisualStyle(std::wstring& path)
 	{
 		path.clear();
-		LPWSTR lpwstr = nullptr;
-		auto hr = get_VisualStyle2(&lpwstr);
-		if (SUCCEEDED(hr) && lpwstr)
+		WCHAR* WCHAR* = nullptr;
+		auto hr = get_VisualStyle2(&WCHAR*);
+		if (SUCCEEDED(hr) && WCHAR*)
 		{
-			const auto lower = SysAllocString(lpwstr);
+			const auto lower = SysAllocString(WCHAR*);
 			for (auto it = lower; *it; ++it)
 				*it = towlower(*it);
 			const auto is_style = wcsstr(lower, L"msstyles") != nullptr;
 			SysFreeString(lower);
 			if (is_style)
 			{
-				path = lpwstr;
-				SysFreeString(lpwstr);
+				path = WCHAR*;
+				SysFreeString(WCHAR*);
 				return hr;
 			}
-			SysFreeString(lpwstr);
+			SysFreeString(WCHAR*);
 		}
-		lpwstr = nullptr;
-		hr = get_VisualStyle(&lpwstr);
-		if (SUCCEEDED(hr) && lpwstr)
+		WCHAR* = nullptr;
+		hr = get_VisualStyle(&WCHAR*);
+		if (SUCCEEDED(hr) && WCHAR*)
 		{
-			const auto lower = SysAllocString(lpwstr);
+			const auto lower = SysAllocString(WCHAR*);
 			for (auto it = lower; *it; ++it)
 				*it = towlower(*it);
 			const auto is_style = wcsstr(lower, L"msstyles") != nullptr;
 			SysFreeString(lower);
 			if (is_style)
 			{
-				path = lpwstr;
-				SysFreeString(lpwstr);
+				path = WCHAR*;
+				SysFreeString(WCHAR*);
 				return hr;
 			}
-			SysFreeString(lpwstr);
+			SysFreeString(WCHAR*);
 			return HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
 		}
 
@@ -133,12 +133,12 @@ MIDL_INTERFACE("{c1e8c83e-845d-4d95-81db-e283fdffc000}") IThemeManager2 : IUnkno
   ) = 0;
   virtual HRESULT WINAPI GetCustomTheme(int*) = 0;
   virtual HRESULT WINAPI GetDefaultTheme(int*) = 0;
-  virtual HRESULT WINAPI CreateThemePack(HWND, LPCWSTR, ULONG pack_flags) = 0;
-  virtual HRESULT WINAPI CloneAndSetCurrentTheme(HWND, LPCWSTR, LPWSTR*) = 0;
-  virtual HRESULT WINAPI InstallThemePack(HWND, LPCWSTR, int, ULONG pack_flags, LPWSTR*, ITheme**) = 0;
-  virtual HRESULT WINAPI DeleteTheme(LPCWSTR) = 0;
-  virtual HRESULT WINAPI OpenTheme(HWND, LPCWSTR, ULONG pack_flags) = 0;
-  virtual HRESULT WINAPI AddAndSelectTheme(HWND, LPCWSTR, ULONG apply_flags, ULONG pack_flags) = 0;
+  virtual HRESULT WINAPI CreateThemePack(HWND, const WCHAR*, ULONG pack_flags) = 0;
+  virtual HRESULT WINAPI CloneAndSetCurrentTheme(HWND, const WCHAR*, WCHAR**) = 0;
+  virtual HRESULT WINAPI InstallThemePack(HWND, const WCHAR*, int, ULONG pack_flags, WCHAR**, ITheme**) = 0;
+  virtual HRESULT WINAPI DeleteTheme(const WCHAR*) = 0;
+  virtual HRESULT WINAPI OpenTheme(HWND, const WCHAR*, ULONG pack_flags) = 0;
+  virtual HRESULT WINAPI AddAndSelectTheme(HWND, const WCHAR*, ULONG apply_flags, ULONG pack_flags) = 0;
   virtual HRESULT WINAPI SQMCurrentTheme() = 0;
   virtual HRESULT WINAPI ExportRoamingThemeToStream(IStream*, int) = 0;
   virtual HRESULT WINAPI ImportRoamingThemeFromStream(IStream*, int) = 0;
@@ -160,9 +160,9 @@ HRESULT themetool_set_active(
 	ULONG pack_flags
 );
 
-HRESULT themetool_theme_get_display_name(ITheme* theme, LPWSTR out, SIZE_T cch);
+HRESULT themetool_theme_get_display_name(ITheme* theme, WCHAR* out, SIZE_T cch);
 
-HRESULT themetool_theme_get_vs_path(ITheme* theme, LPWSTR out, SIZE_T cch);
+HRESULT themetool_theme_get_vs_path(ITheme* theme, WCHAR* out, SIZE_T cch);
 
 void themetool_theme_release(ITheme* theme);
 
@@ -291,21 +291,21 @@ HRESULT secureuxtheme_install(ULONG install_flags);
  * @param executable Executable name
  * @return A HRESULT
  */
-HRESULT secureuxtheme_hook_add(LPCWSTR executable);
+HRESULT secureuxtheme_hook_add(const WCHAR* executable);
 
 /**
  * @brief Uninstall SecureUxTheme for a specific executable.
  * @param executable Executable name
  * @return A HRESULT
  */
-HRESULT secureuxtheme_hook_remove(LPCWSTR executable);
+HRESULT secureuxtheme_hook_remove(const WCHAR* executable);
 
 /**
  * @brief Test if an executable is hooked.
  * @param executable Executable name
  * @return Whether hooks are installed for the executable
  */
-BOOLEAN secureuxtheme_hook_test(LPCWSTR executable);
+BOOLEAN secureuxtheme_hook_test(const WCHAR* executable);
 
 /**
  * @brief Uninstall all hooks and delete the dll.

@@ -57,14 +57,14 @@ void RectifyThemeCfgPage::OnEvent(DirectUI::Event* iev)
 
 	if (iev->uidType == DirectUI::TouchButton::Click)
 	{
-		if (iev->peTarget->GetID() == DirectUI::StrToID((LPCWSTR)L"SaveThemePreferences"))
+		if (iev->peTarget->GetID() == DirectUI::StrToID(L"SaveThemePreferences"))
 		{
-			DirectUI::TouchCheckBox* IgnoreBg = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreBg"));
-			DirectUI::TouchCheckBox* IgnoreCursors = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreCursors"));
-			DirectUI::TouchCheckBox* IgnoreIcons = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreIcons"));
-			DirectUI::TouchCheckBox* IgnoreColors = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreColors"));
-			DirectUI::TouchCheckBox* IgnoreSounds = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreSounds"));
-			DirectUI::TouchCheckBox* IgnoreScreensavers = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreScreensavers"));
+			DirectUI::TouchCheckBox* IgnoreBg = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID(L"IgnoreBg"));
+			DirectUI::TouchCheckBox* IgnoreCursors = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID(L"IgnoreCursors"));
+			DirectUI::TouchCheckBox* IgnoreIcons = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID(L"IgnoreIcons"));
+			DirectUI::TouchCheckBox* IgnoreColors = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID(L"IgnoreColors"));
+			DirectUI::TouchCheckBox* IgnoreSounds = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID(L"IgnoreSounds"));
+			DirectUI::TouchCheckBox* IgnoreScreensavers = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID(L"IgnoreScreensavers"));
 
 			DWORD IgnoreBgVal = IgnoreBg->GetCheckedState() != DirectUI::CSF_Unchecked;
 			DWORD IgnoreCursorsVal = IgnoreCursors->GetCheckedState() != DirectUI::CSF_Unchecked;
@@ -82,16 +82,16 @@ void RectifyThemeCfgPage::OnEvent(DirectUI::Event* iev)
 
 			DWORD size = 4;
 
-			RegSetKeyValueW(Rectify11, NULL, L"IgnoreBg", REG_DWORD, (LPCVOID)&IgnoreBgVal, sizeof(DWORD));
-			RegSetKeyValueW(Rectify11, NULL, L"IgnoreCursors", REG_DWORD, (LPCVOID)&IgnoreCursorsVal, sizeof(DWORD));
-			RegSetKeyValueW(Rectify11, NULL, L"IgnoreIcons", REG_DWORD, (LPCVOID)&IgnoreIconsVal, sizeof(DWORD));
-			RegSetKeyValueW(Rectify11, NULL, L"IgnoreColors", REG_DWORD, (LPCVOID)&IgnoreColorsVal, sizeof(DWORD));
-			RegSetKeyValueW(Rectify11, NULL, L"IgnoreSounds", REG_DWORD, (LPCVOID)&IgnoreSoundsVal, sizeof(DWORD));
-			RegSetKeyValueW(Rectify11, NULL, L"IgnoreScreensavers", REG_DWORD, (LPCVOID)&IgnoreScreensaversVal, sizeof(DWORD));
+			RegSetKeyValueW(Rectify11, NULL, L"IgnoreBg", REG_DWORD, &IgnoreBgVal, sizeof(DWORD));
+			RegSetKeyValueW(Rectify11, NULL, L"IgnoreCursors", REG_DWORD, &IgnoreCursorsVal, sizeof(DWORD));
+			RegSetKeyValueW(Rectify11, NULL, L"IgnoreIcons", REG_DWORD, &IgnoreIconsVal, sizeof(DWORD));
+			RegSetKeyValueW(Rectify11, NULL, L"IgnoreColors", REG_DWORD, &IgnoreColorsVal, sizeof(DWORD));
+			RegSetKeyValueW(Rectify11, NULL, L"IgnoreSounds", REG_DWORD, &IgnoreSoundsVal, sizeof(DWORD));
+			RegSetKeyValueW(Rectify11, NULL, L"IgnoreScreensavers", REG_DWORD, &IgnoreScreensaversVal, sizeof(DWORD));
 			RegCloseKey(Rectify11);
 			GoBack();
 		}
-		else if (iev->peTarget->GetID() == DirectUI::StrToID((LPCWSTR)L"IgnoreThemePreferences"))
+		else if (iev->peTarget->GetID() == DirectUI::StrToID(L"IgnoreThemePreferences"))
 		{
 			GoBack();
 		}
@@ -101,7 +101,7 @@ void RectifyThemeCfgPage::OnEvent(DirectUI::Event* iev)
 void RectifyThemeCfgPage::GoBack()
 {
 	GUID SID_STopLevelBrowser = {};
-	HRESULT hr = CLSIDFromString(L"{4c96be40-915c-11cf-99d3-00aa004ae837}", (LPCLSID)&SID_STopLevelBrowser);
+	HRESULT hr = CLSIDFromString(L"{4c96be40-915c-11cf-99d3-00aa004ae837}", &SID_STopLevelBrowser);
 	if (SUCCEEDED(hr))
 	{
 		IShellBrowser* browser = NULL;
@@ -125,15 +125,15 @@ void RectifyThemeCfgPage::GoBack()
 HRESULT RectifyThemeCfgPage::LayoutInitialized()
 {
 	Element* root = GetRoot();
-	DirectUI::TouchCheckBox* IgnoreBg = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreBg"));
-	DirectUI::TouchCheckBox* IgnoreCursors = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreCursors"));
-	DirectUI::TouchCheckBox* IgnoreIcons = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreIcons"));
-	DirectUI::TouchCheckBox* IgnoreColors = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreColors"));
-	DirectUI::TouchCheckBox* IgnoreSounds = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreSounds"));
-	DirectUI::TouchCheckBox* IgnoreScreensavers = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreScreensavers"));
+	DirectUI::TouchCheckBox* IgnoreBg = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID(L"IgnoreBg"));
+	DirectUI::TouchCheckBox* IgnoreCursors = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID(L"IgnoreCursors"));
+	DirectUI::TouchCheckBox* IgnoreIcons = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID(L"IgnoreIcons"));
+	DirectUI::TouchCheckBox* IgnoreColors = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID(L"IgnoreColors"));
+	DirectUI::TouchCheckBox* IgnoreSounds = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID(L"IgnoreSounds"));
+	DirectUI::TouchCheckBox* IgnoreScreensavers = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID(L"IgnoreScreensavers"));
 
-	DirectUI::TouchButton* SaveThemePreferences = (DirectUI::TouchButton*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"SaveThemePreferences"));
-	DirectUI::TouchButton* IgnoreThemePreferences = (DirectUI::TouchButton*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreThemePreferences"));
+	DirectUI::TouchButton* SaveThemePreferences = (DirectUI::TouchButton*)root->FindDescendent(DirectUI::StrToID(L"SaveThemePreferences"));
+	DirectUI::TouchButton* IgnoreThemePreferences = (DirectUI::TouchButton*)root->FindDescendent(DirectUI::StrToID(L"IgnoreThemePreferences"));
 
 	HKEY Rectify11;
 	if (RegCreateKey(HKEY_CURRENT_USER, Rectify11PrefsKey, &Rectify11))

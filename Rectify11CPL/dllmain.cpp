@@ -101,9 +101,9 @@ void RefreshFolderViews(UINT csidl)
 typedef struct
 {
 	HKEY  hRootKey;
-	PCWSTR pszSubKey;
-	PCWSTR pszClassID;
-	PCWSTR pszValueName;
+	const WCHAR* pszSubKey;
+	const WCHAR* pszClassID;
+	const WCHAR* pszValueName;
 	BYTE* pszData;
 	DWORD dwType;
 	DWORD dwSize;
@@ -226,7 +226,7 @@ STDAPI DllRegisterServer()
 				// If this is a string entry, create the string.
 				if (REG_SZ == rgRegEntries[i].dwType)
 				{
-					hr = StringCchPrintfW(szData, ARRAYSIZE(szData), (LPWSTR)rgRegEntries[i].pszData, szModulePathAndName);
+					hr = StringCchPrintfW(szData, ARRAYSIZE(szData), (WCHAR*)rgRegEntries[i].pszData, szModulePathAndName);
 					if (SUCCEEDED(hr))
 					{
 						RegSetValueExW(hKey,
@@ -244,7 +244,7 @@ STDAPI DllRegisterServer()
 						0,
 						rgRegEntries[i].dwType,
 						(LPBYTE)rgRegEntries[i].pszData,
-						(lstrlenW((LPWSTR)rgRegEntries[i].pszData) + 1) * sizeof(WCHAR));
+						(lstrlenW((WCHAR*)rgRegEntries[i].pszData) + 1) * sizeof(WCHAR));
 				}
 				else if (REG_DWORD == rgRegEntries[i].dwType)
 				{
@@ -293,7 +293,7 @@ STDAPI DllRegisterServer()
 					lResult = RegSetValueExW(hKey, NULL, 0, REG_SZ, (LPBYTE)szData, (lstrlenW(szData) + 1) * sizeof(szData[0]));
 					RegCloseKey(hKey);
 
-					PCWSTR rgszApprovedClassIDs[] = { szFolderViewImplClassID };
+					const WCHAR* rgszApprovedClassIDs[] = { szFolderViewImplClassID };
 					for (int i = 0; SUCCEEDED(hr) && i < ARRAYSIZE(rgszApprovedClassIDs); i++)
 					{
 						hr = StringCchPrintfW(szSubKey, ARRAYSIZE(szSubKey), SHELL_EXT_APPROVED, szFolderViewImplClassID);

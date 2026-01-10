@@ -17,7 +17,7 @@
 #include "RectifyThemeCfgPage.h"
 #include <map>
 
-FrameProvider::FrameProvider(HINSTANCE hinst, LPCWSTR pszCommonResidToCreate)
+FrameProvider::FrameProvider(HINSTANCE hinst, const WCHAR* pszCommonResidToCreate)
 	: _punkSite(nullptr)
 	, _hinst(hinst)
 	, _hrInit(E_FAIL)
@@ -169,7 +169,7 @@ IFACEMETHODIMP FrameProvider::LayoutInitialized()
 	return S_OK;
 }
 
-IFACEMETHODIMP FrameProvider::Notify(LPCWSTR pszChangedProp)
+IFACEMETHODIMP FrameProvider::Notify(const WCHAR* pszChangedProp)
 {
 	DUI_WalkIUnknownElements(DirectUI::XProvider::GetRoot(), DUI_SendNotificationToUnknown, (LPARAM)pszChangedProp);
 	return S_OK;

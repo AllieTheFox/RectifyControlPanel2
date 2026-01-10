@@ -11,7 +11,7 @@ class FrameProvider
 	, public IServiceProvider
 {
 public:
-	FrameProvider(HINSTANCE hinst, LPCWSTR pszCommonResidToCreate);
+	FrameProvider(HINSTANCE hinst, const WCHAR* pszCommonResidToCreate);
 
 	// == Begin IUnknown Impl ==
 	IFACEMETHOD(QueryInterface)(_In_ REFIID riid, _Out_ LPVOID *ppv) override;
@@ -30,7 +30,7 @@ public:
 
 	// == Begin IFrameNotificationClient Impl ==
 	IFACEMETHOD(LayoutInitialized)() override;
-	IFACEMETHOD(Notify)(LPCWSTR pszChangedProp) override;
+	IFACEMETHOD(Notify)(const WCHAR* pszChangedProp) override;
 	IFACEMETHOD(OnNavigateAway)() override;
 	IFACEMETHOD(OnInnerElementDestroyed)() override;
 	// == End IFrameNotificationClient Impl ==

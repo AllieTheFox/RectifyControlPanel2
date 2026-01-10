@@ -66,8 +66,8 @@ BOOL SHWindowsPolicy(REFGUID rpolid)
         return fn(rpolid);
 }
 
-typedef int (WINAPI *SHStringFromGUIDW_t)(REFGUID guid, LPWSTR lpszDest, int cchMax);
-int SHStringFromGUIDW(REFGUID guid, LPWSTR lpszDest, int cchMax)
+typedef int (WINAPI *SHStringFromGUIDW_t)(REFGUID guid, WCHAR* lpszDest, int cchMax);
+int SHStringFromGUIDW(REFGUID guid, WCHAR* lpszDest, int cchMax)
 {
     static SHStringFromGUIDW_t fn = nullptr;
     if (!fn)
@@ -86,7 +86,7 @@ int SHStringFromGUIDW(REFGUID guid, LPWSTR lpszDest, int cchMax)
 DEFINE_GUID(POLID_NoControlPanel, 0x8204C743, 0xCB99, 0x4578, 0xA7, 0xCC, 0x9D, 0xCC, 0xB9, 0xA3, 0x8C, 0x70);
 DEFINE_GUID(CLSID_ControlPanelCategory, 0x26EE0668, 0xA00A, 0x44D7, 0x93, 0x71, 0xBE, 0xB0, 0x64, 0xC9, 0x86, 0x83);
 
-HRESULT CControlPanelPage::Notify(LPCWSTR pszChangedProp)
+HRESULT CControlPanelPage::Notify(const WCHAR* pszChangedProp)
 {
     if (!_punkSite)
         return E_INVALIDARG;

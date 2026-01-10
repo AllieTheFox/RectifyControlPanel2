@@ -275,7 +275,7 @@ BOOL CRectifyUtil::KillTask(wstring proc)
 }
 
 
-HRESULT startProc(LPCWSTR proc, wstring args = L"", bool waitForExit = false)
+HRESULT startProc(const WCHAR* proc, wstring args = L"", bool waitForExit = false)
 {
 	STARTUPINFOW si;
 	PROCESS_INFORMATION pi;
@@ -392,7 +392,7 @@ void CRectifyUtil::RestartExplorer()
 	startProc(L"C:\\windows\\explorer.exe");
 }
 
-HRESULT CreateLink(LPCWSTR lpszTarget, LPCWSTR lpszDesc, LPCWSTR lpszWorkingDir, LPCSTR lpszShortcutPath)
+HRESULT CreateLink(const WCHAR* lpszTarget, const WCHAR* lpszDesc, const WCHAR* lpszWorkingDir, LPCSTR lpszShortcutPath)
 {
 	HRESULT hres;
 	IShellLink* psl = NULL;
@@ -546,7 +546,7 @@ HRESULT CRectifyUtil::SetMicaForEveryoneEnabled(BOOL micaEnabled, BOOL tabbed)
 	PVOID pvData = value;
 	DWORD size = sizeof(value);
 	RegGetValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager", L"DllName", RRF_RT_REG_SZ, 0, pvData, &size);
-	std::wstring msstylePath = std::wstring((LPCWSTR)pvData);
+	std::wstring msstylePath = std::wstring((const WCHAR*)pvData);
 
 	std::wstring currentThemeName = msstylePath;
 
@@ -754,7 +754,7 @@ HRESULT CRectifyUtil::SetCurrentMenuByIndex(DWORD menuIndex)
 }
 
 static bool themetool_loaded = false;
-HRESULT CRectifyUtil::ApplyTheme(LPCWSTR pThemeName)
+HRESULT CRectifyUtil::ApplyTheme(const WCHAR* pThemeName)
 {
 	HRESULT hr = S_OK;
 	if (!themetool_loaded)
@@ -898,7 +898,7 @@ BOOL IsDarkTheme()
 	PVOID pvData = value;
 	DWORD size = sizeof(value);
 	RegGetValueW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager", L"DllName", RRF_RT_REG_SZ, 0, pvData, &size);
-	std::wstring msstylePath = std::wstring((LPCWSTR)pvData);
+	std::wstring msstylePath = std::wstring((const WCHAR*)pvData);
 
 	size_t result = msstylePath.find(L"Dark");
 	return result > 0 ? TRUE : FALSE;

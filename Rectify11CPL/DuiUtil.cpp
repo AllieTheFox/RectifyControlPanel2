@@ -32,7 +32,7 @@ void CALLBACK DUI_SendNotificationToUnknown(IUnknown *punk, LPARAM lparam)
     IFrameNotificationClient *pfnc;
     if (SUCCEEDED(punk->QueryInterface(IID_PPV_ARGS(&pfnc))))
     {
-        pfnc->Notify((LPCWSTR)lparam);
+        pfnc->Notify((const WCHAR*)lparam);
         pfnc->Release();
     }
 }

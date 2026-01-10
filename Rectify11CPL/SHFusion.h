@@ -53,7 +53,7 @@ void SHDeactivateContext(ULONG_PTR ulCookie)
 	}
 }
 
-HMODULE SHFusionLoadLibrary(LPCWSTR lpLibFileName)
+HMODULE SHFusionLoadLibrary(const WCHAR* lpLibFileName)
 {
 	ULONG_PTR ulCookie = 0;
 	HMODULE hMod = (HMODULE)SHActivateContext(&ulCookie);
