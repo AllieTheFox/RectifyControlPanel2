@@ -16,11 +16,11 @@ public:
 	static HRESULT Create(Element *pParent, DWORD *pdwDeferCookie, Element **ppElement);
 
 	// Element overrides
-	virtual void OnEvent(Event *iev) override;
+	virtual void OnEvent(DirectUI::Event *iev) override;
 	virtual void OnDestroy() override;
 
 	static DirectUI::IClassInfo* Class;
-	virtual IClassInfo *GetClassInfo() override;
+	virtual DirectUI::IClassInfo *GetClassInfo() override;
 
 	static HRESULT Register();
 

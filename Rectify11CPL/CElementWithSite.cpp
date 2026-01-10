@@ -35,7 +35,7 @@ HRESULT CElementWithSite::GetSite(REFIID riid, void** ppvSite)
 	return _punkSite ? _punkSite->QueryInterface(riid, ppvSite) : E_FAIL;
 }
 
-IClassInfo* CElementWithSite::Class;
+DirectUI::IClassInfo* CElementWithSite::Class;
 
 HRESULT CElementWithSite::Create(DirectUI::Element* pParent, DWORD* pdwDeferCookie, DirectUI::Element** ppElement)
 {
@@ -52,7 +52,7 @@ HRESULT CElementWithSite::Register()
 	HRESULT hr = CElementWithIUnknown::Register();
 	if (SUCCEEDED(hr))
 	{
-		hr = ClassInfo<CElementWithSite, CElementWithIUnknown>::RegisterGlobal(g_hinst, L"CElementWithSite", 0, NULL);
+		hr = DirectUI::ClassInfo<CElementWithSite, CElementWithIUnknown>::RegisterGlobal(g_hinst, L"CElementWithSite", 0, NULL);
 	}
 
 	return hr;

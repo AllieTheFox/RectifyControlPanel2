@@ -41,7 +41,7 @@ DirectUI::IClassInfo *CElementWithIUnknown::GetClassInfo()
 
 HRESULT CElementWithIUnknown::Register()
 {
-	return ClassInfo<CElementWithIUnknown, DirectUI::Element>::RegisterGlobal(g_hinst, L"CElementWithIUnknown", nullptr, 0);
+	return DirectUI::ClassInfo<CElementWithIUnknown, DirectUI::Element>::RegisterGlobal(g_hinst, L"CElementWithIUnknown", nullptr, 0);
 }
 
 IUnknown *CElementWithIUnknown::GetUnknownFromElement(DirectUI::Element *pe)

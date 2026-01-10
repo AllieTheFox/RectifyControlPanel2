@@ -2,9 +2,9 @@
 
 #include "FocusIndicator.h"
 
-IClassInfo* CFocusIndicator::Class = nullptr;
+DirectUI::IClassInfo* CFocusIndicator::Class = nullptr;
 
-IClassInfo* CFocusIndicator::GetClassInfo()
+DirectUI::IClassInfo* CFocusIndicator::GetClassInfo()
 {
 	return Class;
 }	

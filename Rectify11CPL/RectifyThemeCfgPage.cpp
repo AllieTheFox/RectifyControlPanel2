@@ -4,17 +4,14 @@
 
 #include "CRectifyUtil.h"
 
-IClassInfo* RectifyThemeCfgPage::Class = NULL;
-
+DirectUI::IClassInfo* RectifyThemeCfgPage::Class = NULL;
 
 RectifyThemeCfgPage::RectifyThemeCfgPage()
 {
-
 }
 
 RectifyThemeCfgPage::~RectifyThemeCfgPage()
 {
-
 }
 
 HRESULT RectifyThemeCfgPage::Create(Element* pParent, DWORD* pdwDeferCookie, Element** ppElement)
@@ -50,31 +47,31 @@ IFACEMETHODIMP RectifyThemeCfgPage::QueryInterface(REFIID riid, void **ppv)
 	return hr;
 }
 
-void RectifyThemeCfgPage::OnEvent(Event* iev)
+void RectifyThemeCfgPage::OnEvent(DirectUI::Event* iev)
 {
-	if (iev->nStage != GMF_ROUTED)
+	if (iev->nStage != DirectUI::GMF_ROUTED)
 		return;
 	if (!iev->fHandled)
 		Element::OnEvent(iev);
 	if (initializing) return;
 
-	if (iev->uidType == TouchButton::Click)
+	if (iev->uidType == DirectUI::TouchButton::Click)
 	{
-		if (iev->peTarget->GetID() == StrToID((LPCWSTR)L"SaveThemePreferences"))
+		if (iev->peTarget->GetID() == DirectUI::StrToID((LPCWSTR)L"SaveThemePreferences"))
 		{
-			TouchCheckBox* IgnoreBg = (TouchCheckBox*)FindDescendent(StrToID((LPCWSTR)L"IgnoreBg"));
-			TouchCheckBox* IgnoreCursors = (TouchCheckBox*)FindDescendent(StrToID((LPCWSTR)L"IgnoreCursors"));
-			TouchCheckBox* IgnoreIcons = (TouchCheckBox*)FindDescendent(StrToID((LPCWSTR)L"IgnoreIcons"));
-			TouchCheckBox* IgnoreColors = (TouchCheckBox*)FindDescendent(StrToID((LPCWSTR)L"IgnoreColors"));
-			TouchCheckBox* IgnoreSounds = (TouchCheckBox*)FindDescendent(StrToID((LPCWSTR)L"IgnoreSounds"));
-			TouchCheckBox* IgnoreScreensavers = (TouchCheckBox*)FindDescendent(StrToID((LPCWSTR)L"IgnoreScreensavers"));
+			DirectUI::TouchCheckBox* IgnoreBg = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreBg"));
+			DirectUI::TouchCheckBox* IgnoreCursors = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreCursors"));
+			DirectUI::TouchCheckBox* IgnoreIcons = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreIcons"));
+			DirectUI::TouchCheckBox* IgnoreColors = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreColors"));
+			DirectUI::TouchCheckBox* IgnoreSounds = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreSounds"));
+			DirectUI::TouchCheckBox* IgnoreScreensavers = (DirectUI::TouchCheckBox*)FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreScreensavers"));
 
-			DWORD IgnoreBgVal = IgnoreBg->GetCheckedState() != CSF_Unchecked;
-			DWORD IgnoreCursorsVal = IgnoreCursors->GetCheckedState() != CSF_Unchecked;
-			DWORD IgnoreIconsVal = IgnoreIcons->GetCheckedState() != CSF_Unchecked;
-			DWORD IgnoreColorsVal = IgnoreColors->GetCheckedState() != CSF_Unchecked;
-			DWORD IgnoreSoundsVal = IgnoreSounds->GetCheckedState() != CSF_Unchecked;
-			DWORD IgnoreScreensaversVal = IgnoreScreensavers->GetCheckedState() != CSF_Unchecked;
+			DWORD IgnoreBgVal = IgnoreBg->GetCheckedState() != DirectUI::CSF_Unchecked;
+			DWORD IgnoreCursorsVal = IgnoreCursors->GetCheckedState() != DirectUI::CSF_Unchecked;
+			DWORD IgnoreIconsVal = IgnoreIcons->GetCheckedState() != DirectUI::CSF_Unchecked;
+			DWORD IgnoreColorsVal = IgnoreColors->GetCheckedState() != DirectUI::CSF_Unchecked;
+			DWORD IgnoreSoundsVal = IgnoreSounds->GetCheckedState() != DirectUI::CSF_Unchecked;
+			DWORD IgnoreScreensaversVal = IgnoreScreensavers->GetCheckedState() != DirectUI::CSF_Unchecked;
 
 			HKEY Rectify11;
 			if (RegCreateKey(HKEY_CURRENT_USER, Rectify11PrefsKey, &Rectify11))
@@ -94,7 +91,7 @@ void RectifyThemeCfgPage::OnEvent(Event* iev)
 			RegCloseKey(Rectify11);
 			GoBack();
 		}
-		else if (iev->peTarget->GetID() == StrToID((LPCWSTR)L"IgnoreThemePreferences"))
+		else if (iev->peTarget->GetID() == DirectUI::StrToID((LPCWSTR)L"IgnoreThemePreferences"))
 		{
 			GoBack();
 		}
@@ -128,15 +125,15 @@ void RectifyThemeCfgPage::GoBack()
 HRESULT RectifyThemeCfgPage::LayoutInitialized()
 {
 	Element* root = GetRoot();
-	TouchCheckBox* IgnoreBg = (TouchCheckBox*)root->FindDescendent(StrToID((LPCWSTR)L"IgnoreBg"));
-	TouchCheckBox* IgnoreCursors = (TouchCheckBox*)root->FindDescendent(StrToID((LPCWSTR)L"IgnoreCursors"));
-	TouchCheckBox* IgnoreIcons = (TouchCheckBox*)root->FindDescendent(StrToID((LPCWSTR)L"IgnoreIcons"));
-	TouchCheckBox* IgnoreColors = (TouchCheckBox*)root->FindDescendent(StrToID((LPCWSTR)L"IgnoreColors"));
-	TouchCheckBox* IgnoreSounds = (TouchCheckBox*)root->FindDescendent(StrToID((LPCWSTR)L"IgnoreSounds"));
-	TouchCheckBox* IgnoreScreensavers = (TouchCheckBox*)root->FindDescendent(StrToID((LPCWSTR)L"IgnoreScreensavers"));
+	DirectUI::TouchCheckBox* IgnoreBg = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreBg"));
+	DirectUI::TouchCheckBox* IgnoreCursors = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreCursors"));
+	DirectUI::TouchCheckBox* IgnoreIcons = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreIcons"));
+	DirectUI::TouchCheckBox* IgnoreColors = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreColors"));
+	DirectUI::TouchCheckBox* IgnoreSounds = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreSounds"));
+	DirectUI::TouchCheckBox* IgnoreScreensavers = (DirectUI::TouchCheckBox*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreScreensavers"));
 
-	TouchButton* SaveThemePreferences = (TouchButton*)root->FindDescendent(StrToID((LPCWSTR)L"SaveThemePreferences"));
-	TouchButton* IgnoreThemePreferences = (TouchButton*)root->FindDescendent(StrToID((LPCWSTR)L"IgnoreThemePreferences"));
+	DirectUI::TouchButton* SaveThemePreferences = (DirectUI::TouchButton*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"SaveThemePreferences"));
+	DirectUI::TouchButton* IgnoreThemePreferences = (DirectUI::TouchButton*)root->FindDescendent(DirectUI::StrToID((LPCWSTR)L"IgnoreThemePreferences"));
 
 	HKEY Rectify11;
 	if (RegCreateKey(HKEY_CURRENT_USER, Rectify11PrefsKey, &Rectify11))
@@ -170,12 +167,12 @@ HRESULT RectifyThemeCfgPage::LayoutInitialized()
 	IgnoreSounds->SetToggleOnClick(true);
 	IgnoreScreensavers->SetToggleOnClick(true);
 
-	IgnoreBg->SetCheckedState(IgnoreBgVal ? CSF_Checked : CSF_Unchecked);
-	IgnoreCursors->SetCheckedState(IgnoreCursorsVal ? CSF_Checked : CSF_Unchecked);
-	IgnoreIcons->SetCheckedState(IgnoreIconsVal ? CSF_Checked : CSF_Unchecked);
-	IgnoreColors->SetCheckedState(IgnoreColorsVal ? CSF_Checked : CSF_Unchecked);
-	IgnoreSounds->SetCheckedState(IgnoreSoundsVal ? CSF_Checked : CSF_Unchecked);
-	IgnoreScreensavers->SetCheckedState(IgnoreScreensaversVal ? CSF_Checked : CSF_Unchecked);
+	IgnoreBg->SetCheckedState(IgnoreBgVal ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
+	IgnoreCursors->SetCheckedState(IgnoreCursorsVal ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
+	IgnoreIcons->SetCheckedState(IgnoreIconsVal ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
+	IgnoreColors->SetCheckedState(IgnoreColorsVal ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
+	IgnoreSounds->SetCheckedState(IgnoreSoundsVal ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
+	IgnoreScreensavers->SetCheckedState(IgnoreScreensaversVal ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
 	initializing = false;
 
 	return S_OK;

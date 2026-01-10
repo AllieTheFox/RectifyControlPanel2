@@ -55,7 +55,7 @@ HRESULT CFrameModule::Register()
             &impModuleIDProp
         };
 
-        hr = ClassInfo<CFrameModule, CElementWithSite>::RegisterGlobal(g_hinst, L"FrameModule", s_rgProps, ARRAYSIZE(s_rgProps));
+        hr = DirectUI::ClassInfo<CFrameModule, CElementWithSite>::RegisterGlobal(g_hinst, L"FrameModule", s_rgProps, ARRAYSIZE(s_rgProps));
     }
 
     return hr;

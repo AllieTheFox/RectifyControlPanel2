@@ -12,7 +12,7 @@ public:
 	static HRESULT Create(Element *pParent, DWORD *pdwDeferCookie, Element **ppElement);
 
 	//Element
-	virtual IClassInfo *GetClassInfoW() override { return Class; }
+	virtual DirectUI::IClassInfo *GetClassInfoW() override { return Class; }
 
 	static HRESULT Register();
 
@@ -21,7 +21,7 @@ public:
 	IFACEMETHOD_(ULONG, Release)() override { return CElementWithSite::Release(); }
 
 	// Element overrides
-	virtual void OnEvent(Event *iev) override;
+	virtual void OnEvent(DirectUI::Event *iev) override;
 
 	// Important methods
 	virtual HRESULT LayoutInitialized() override;

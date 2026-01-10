@@ -34,7 +34,7 @@ HRESULT CNavigateButton::Create(DirectUI::Element *pParent, DWORD *pdwDeferCooki
 
 void CNavigateButton::OnEvent(DirectUI::Event *pEvent)
 {
-	if (pEvent->nStage == GMF_BUBBLED && pEvent->uidType == DirectUI::Button::Click)
+	if (pEvent->nStage == DirectUI::GMF_BUBBLED && pEvent->uidType == DirectUI::Button::Click)
 	{
 		DirectUI::Value *pvShellExecute;
 		LPCWSTR pszShellExecute = GetShellExecute(&pvShellExecute);

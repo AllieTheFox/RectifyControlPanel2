@@ -30,7 +30,6 @@
 
 #include "../dui70/DirectUI/DirectUI.h"
 
-using namespace DirectUI;
 using namespace std;
 namespace fs = std::filesystem;
 
