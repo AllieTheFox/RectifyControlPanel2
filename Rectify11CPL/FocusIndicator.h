@@ -3,11 +3,12 @@
 class CFocusIndicator : public DirectUI::Element
 {
 public:
-    static HRESULT Create(DirectUI::Element *pParent, DWORD *pdwDeferCookie, DirectUI::Element **ppElement);
-    static DirectUI::IClassInfo *Class;
-    DirectUI::IClassInfo *GetClassInfo() override;
+    static HRESULT Create(Element* pParent, DWORD* pdwDeferCookie, Element** ppElement);
+
+    static DirectUI::IClassInfo* Class;
+    DirectUI::IClassInfo* GetClassInfoW() override;
     static HRESULT Register();
 
-    static const DirectUI::PropertyInfo *FirstTabTargetProp;
+    static const DirectUI::PropertyInfo* FirstTabTargetProp;
     ATOM GetTargetId();
 };
