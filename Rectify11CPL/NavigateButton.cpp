@@ -102,7 +102,7 @@ static const DirectUI::PropertyInfo impNoBackstackProp =
 
 const DirectUI::PropertyInfo* CNavigateButton::NoBackstackProp = &impNoBackstackProp;
 
-static DirectUI::_StaticValuePtr* svShellExecute()
+static DirectUI::Value* svShellExecute()
 {
     static DirectUI::_StaticValuePtr value =
     {
@@ -111,7 +111,7 @@ static DirectUI::_StaticValuePtr* svShellExecute()
         /*_cRef*/ -1,
         /*_ptr*/ (void*)L""
     };
-    return &value;
+    return reinterpret_cast<DirectUI::Value*>(&value);
 }
 
 static DirectUI::PropertyInfoData dataimpShellExecuteProp;
@@ -123,13 +123,13 @@ static const DirectUI::PropertyInfo impShellExecuteProp =
     .fGroups = DirectUI::PG_None,
     .pValidValues = vvimpShellExecuteProp,
     .pEnumMaps = nullptr,
-    .DefaultProc = (DefaultValueProcT)&svShellExecute,
+    .DefaultProc = &svShellExecute,
     .pData = &dataimpShellExecuteProp
 };
 
 const DirectUI::PropertyInfo* CNavigateButton::ShellExecuteProp = &impShellExecuteProp;
 
-static DirectUI::_StaticValuePtr* svShellExecuteVerb()
+static DirectUI::Value* svShellExecuteVerb()
 {
     static DirectUI::_StaticValuePtr value =
     {
@@ -138,7 +138,7 @@ static DirectUI::_StaticValuePtr* svShellExecuteVerb()
         /*_cRef*/ -1,
         /*_ptr*/ (void*)L""
     };
-    return &value;
+    return reinterpret_cast<DirectUI::Value*>(&value);
 }
 
 static DirectUI::PropertyInfoData dataimpShellExecuteVerbProp;
@@ -150,13 +150,13 @@ static const DirectUI::PropertyInfo impShellExecuteVerbProp =
     .fGroups = DirectUI::PG_None,
     .pValidValues = vvimpShellExecuteVerbProp,
     .pEnumMaps = nullptr,
-    .DefaultProc = (DefaultValueProcT)&svShellExecuteVerb,
+    .DefaultProc = &svShellExecuteVerb,
     .pData = &dataimpShellExecuteVerbProp
 };
 
 const DirectUI::PropertyInfo* CNavigateButton::ShellExecuteVerbProp = &impShellExecuteVerbProp;
 
-static DirectUI::_StaticValuePtr* svShellExecuteParams()
+static DirectUI::Value* svShellExecuteParams()
 {
     static DirectUI::_StaticValuePtr value =
     {
@@ -165,7 +165,7 @@ static DirectUI::_StaticValuePtr* svShellExecuteParams()
         /*_cRef*/ -1,
         /*_ptr*/ (void*)L""
     };
-    return &value;
+    return reinterpret_cast<DirectUI::Value*>(&value);
 }
 
 static DirectUI::PropertyInfoData dataimpShellExecuteParamsProp;
@@ -177,7 +177,7 @@ static const DirectUI::PropertyInfo impShellExecuteParamsProp =
     .fGroups = DirectUI::PG_None,
     .pValidValues = vvimpShellExecuteParamsProp,
     .pEnumMaps = nullptr,
-    .DefaultProc = (DefaultValueProcT)&svShellExecuteParams,
+    .DefaultProc = &svShellExecuteParams,
     .pData = &dataimpShellExecuteParamsProp
 };
 
