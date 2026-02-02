@@ -70,4 +70,4 @@ template <typename TInnerClass, const WCHAR* TModuleID>
 HRESULT FrameModule_CreateInnerObjectImpl(IUnknown** ppunkInner);
 
 template <typename TElement, int nCreate, int nActive, bool bShellLayout>
-HRESULT FrameModule_CreateImpl(DirectUI::Element* pParent, DWORD* pdwDeferCookie, DirectUI::Element** ppElement)
+HRESULT FrameModule_CreateImpl(DirectUI::Element* pParent, DWORD* pdwDeferCookie, DirectUI::Element** ppElement);
