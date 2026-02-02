@@ -66,25 +66,8 @@ private:
 
 HRESULT CreateWrapperForElement(DirectUI::Element* pe, REFIID riid, void** ppv);
 
-template <
-    typename TInnerClass,
-    const WCHAR* const TModuleID
->
-HRESULT FrameModule_CreateInnerObjectImpl(IUnknown** ppunkInner)
-{
-    DWORD dwCookie;
-    DirectUI::Element* pe;
-    HRESULT hr = TInnerClass::Create(0, &dwCookie, &pe);
-    if (SUCCEEDED(hr))
-    {
-        pe->SetID(TModuleID);
-        pe->SetLayoutPos(4);
-        pe->EndDefer(dwCookie);
-        hr = CreateWrapperForElement(pe, IID_PPV_ARGS(ppunkInner));
-        if (FAILED(hr))
-        {
-            pe->Destroy();
-        }
-    }
-    return hr;
-}
+template <typename TInnerClass, const WCHAR* TModuleID>
+HRESULT FrameModule_CreateInnerObjectImpl(IUnknown** ppunkInner);
+
+template <typename TElement, int nCreate, int nActive, bool bShellLayout>
+HRESULT FrameModule_CreateImpl(DirectUI::Element* pParent, DWORD* pdwDeferCookie, DirectUI::Element** ppElement)

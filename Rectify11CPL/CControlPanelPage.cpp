@@ -48,24 +48,6 @@ HRESULT CControlPanelPage::LayoutInitialized()
     return S_OK;
 }
 
-typedef BOOL (WINAPI *SHWindowsPolicy_t)(REFGUID rpolid);
-
-BOOL SHWindowsPolicy(REFGUID rpolid)
-{
-    static SHWindowsPolicy_t fn = nullptr;
-    if (!fn)
-    {
-        HMODULE h = LoadLibrary(L"shcore.dll");
-        if (h)
-            fn = (SHWindowsPolicy_t)GetProcAddress(h, MAKEINTRESOURCEA(190));
-    }
-
-    if (fn == nullptr)
-        return E_FAIL;
-    else
-        return fn(rpolid);
-}
-
 typedef int (WINAPI *SHStringFromGUIDW_t)(REFGUID guid, WCHAR* lpszDest, int cchMax);
 int SHStringFromGUIDW(REFGUID guid, WCHAR* lpszDest, int cchMax)
 {

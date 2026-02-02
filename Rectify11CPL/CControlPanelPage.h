@@ -37,7 +37,7 @@ public:
     static HRESULT Create(CControlPanelPage* pCControlPanelPage, IDispatch** ppDisp);
 
     //~ Begin IUnknown Interface
-    STDMETHODIMP QueryInterface(REFIID, void**) override;
+    STDMETHODIMP QueryInterface(REFIID riid, void** ppv) override;
     STDMETHODIMP_(ULONG) AddRef() override;
     STDMETHODIMP_(ULONG) Release() override;
     //~ End IUnknown Interface

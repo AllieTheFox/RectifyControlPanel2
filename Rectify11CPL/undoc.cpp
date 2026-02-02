@@ -44,3 +44,21 @@ STDAPI_(BOOL) SHIsChildOrSelf(HWND hwndParent, HWND hwnd)
 {
 	return !hwndParent || !hwnd || hwndParent != hwnd && !IsChild(hwndParent, hwnd);
 }
+
+typedef BOOL (WINAPI *SHWindowsPolicy_t)(REFGUID rpolid);
+
+BOOL SHWindowsPolicy(REFGUID rpolid)
+{
+	static SHWindowsPolicy_t fn = nullptr;
+	if (!fn)
+	{
+		HMODULE h = LoadLibrary(L"shcore.dll");
+		if (h)
+			fn = (SHWindowsPolicy_t)GetProcAddress(h, MAKEINTRESOURCEA(190));
+	}
+
+	if (fn == nullptr)
+		return E_FAIL;
+	else
+		return fn(rpolid);
+}

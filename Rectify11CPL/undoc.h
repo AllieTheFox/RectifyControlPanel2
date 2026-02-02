@@ -6,6 +6,9 @@
 
 #include "ResultUtils.h"
 
+#define RECTWIDTH(rc)   ((rc).right-(rc).left)
+#define RECTHEIGHT(rc)  ((rc).bottom-(rc).top)
+
 template <class T>
 void SafeRelease(__deref_inout_opt T **ppT)
 {
@@ -205,3 +208,5 @@ IControlPanelPrivate : IUnknown
 	virtual HRESULT STDMETHODCALLTYPE StopLoggingRecentItems() = 0;
 	virtual HRESULT STDMETHODCALLTYPE AdjustIDListToAllItemsView(ITEMIDLIST_ABSOLUTE*, ITEMIDLIST_ABSOLUTE**) = 0;
 };
+
+STDAPI_(BOOL) SHWindowsPolicy(REFGUID rpolid);
