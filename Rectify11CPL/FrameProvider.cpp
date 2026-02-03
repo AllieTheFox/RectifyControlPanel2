@@ -164,14 +164,14 @@ IFACEMETHODIMP FrameProvider::OptionallyTakeInitialFocus(BOOL *pbTookFocus)
 // IFrameNotificationClient implementation
 IFACEMETHODIMP FrameProvider::LayoutInitialized()
 {
-	DUI_WalkIUnknownElements(DirectUI::XProvider::GetRoot(), DUI_SetSiteOnUnknown, (LPARAM)static_cast<IDUIElementProviderInit *>(this));
-	DUI_WalkIUnknownElements(DirectUI::XProvider::GetRoot(), DUI_SendInitializationToUnknown, 0);
+	DUI_WalkIUnknownElements(GetRoot(), DUI_SetSiteOnUnknown, reinterpret_cast<LPARAM>(static_cast<IDUIElementProviderInit*>(this)));
+	DUI_WalkIUnknownElements(GetRoot(), DUI_SendInitializationToUnknown, 0);
 	return S_OK;
 }
 
 IFACEMETHODIMP FrameProvider::Notify(const WCHAR* pszChangedProp)
 {
-	DUI_WalkIUnknownElements(DirectUI::XProvider::GetRoot(), DUI_SendNotificationToUnknown, (LPARAM)pszChangedProp);
+	DUI_WalkIUnknownElements(GetRoot(), DUI_SendNotificationToUnknown, reinterpret_cast<LPARAM>(pszChangedProp));
 	return S_OK;
 }
 
