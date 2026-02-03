@@ -1,14 +1,13 @@
 #pragma once
 
-#include "NavigateButton.h"
-#include "Windows.h"
+#include "CElementWithSite.h"
 
-MIDL_INTERFACE("60CE96BB-B6F9-42DC-B84E-5E5D9C370A6F")
+MIDL_INTERFACE("60ce96bb-b6f9-42dc-b84e-5e5d9c370a6f")
 IFrameModule : IUnknown
 {
-    STDMETHOD(CreateInnerObject)(IUnknown **ppunkInner) PURE;
-    STDMETHOD(SetInnerObject)(IUnknown *punkInner) PURE;
-    STDMETHOD(GetModuleID)(LPWSTR *ppszModuleID) PURE;
+    virtual HRESULT STDMETHODCALLTYPE CreateInnerObject(IUnknown** ppunkInner) = 0;
+    virtual HRESULT STDMETHODCALLTYPE SetInnerObject(IUnknown* punkInner) = 0;
+    virtual HRESULT STDMETHODCALLTYPE GetModuleID(WCHAR** ppszModuleID) = 0;
 };
 
 class CFrameModule
@@ -16,28 +15,28 @@ class CFrameModule
     , public IFrameModule
 {
 public:
-	// == Begin IUnknown Interface ==
-    IFACEMETHODIMP QueryInterface(REFIID riid, void ** ppv);
-	// == End IUnknown Interface ==
+    //~ Begin IUnknown Interface
+    STDMETHODIMP QueryInterface(REFIID riid, void** ppv) override;
+    //~ End IUnknown Interface
 
-    static HRESULT Create(DirectUI::Element *pParent, DWORD *pdwDeferCookie, DirectUI::Element **ppElement);
-    static DirectUI::IClassInfo *Class;
-    DirectUI::IClassInfo *GetClassInfo() override { return Class; }
+    static HRESULT Create(Element* pParent, DWORD* pdwDeferCookie, Element** ppElement);
+    static DirectUI::IClassInfo* Class;
+    DirectUI::IClassInfo* GetClassInfoW() override;
 
     static HRESULT Register();
-    static const DirectUI::PropertyInfo *ModuleIDProp;
+    static const DirectUI::PropertyInfo* ModuleIDProp;
 
-	// == Begin IFrameModule Interface ==
-    IFACEMETHODIMP CreateInnerObject(IUnknown **ppunkInner) PURE;
-    IFACEMETHODIMP SetInnerObject(IUnknown *punkInner);
-    IFACEMETHODIMP GetModuleID(LPWSTR *ppszModuleID);
-	// == End IFrameModule Interface ==
+    //~ Begin IFrameModule Interface
+    STDMETHODIMP CreateInnerObject(IUnknown** ppunkInner) override PURE;
+    STDMETHODIMP SetInnerObject(IUnknown* punkInner) override;
+    STDMETHODIMP GetModuleID(WCHAR** ppszModuleID) override;
+    //~ End IFrameModule Interface
 };
 
 MIDL_INTERFACE("b8c7036c-8d15-456d-84f5-82fb5b1ae6a5")
 IWrappedDUIElement : IUnknown
 {
-    STDMETHOD(GetElement)(void**) PURE;
+    virtual HRESULT STDMETHODCALLTYPE GetElement(void**) = 0;
 };
 
 class ElementWrapper final : public IWrappedDUIElement
@@ -47,9 +46,9 @@ public:
     ElementWrapper(const ElementWrapper& other) = delete;
 
     //~ Begin IUnknown Interface
-    STDMETHODIMP QueryInterface(REFIID, void**);
-    STDMETHODIMP_(ULONG) AddRef();
-    STDMETHODIMP_(ULONG) Release();
+    STDMETHODIMP QueryInterface(REFIID, void**) override;
+    STDMETHODIMP_(ULONG) AddRef() override;
+    STDMETHODIMP_(ULONG) Release() override;
     //~ End IUnknown Interface
 
     //~ Begin IWrappedDUIElement Interface

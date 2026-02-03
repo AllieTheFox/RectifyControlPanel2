@@ -2,9 +2,9 @@
 
 #include "DuiUtil.h"
 
-HRESULT CALLBACK DUI_SetSiteOnUnknown(IUnknown *punk, IUnknown *punkSite)
+void CALLBACK DUI_SetSiteOnUnknown(IUnknown* punk, LPARAM lParam)
 {
-    return IUnknown_SetSite(punk, punkSite);
+    IUnknown_SetSite(punk, reinterpret_cast<IUnknown*>(lParam));
 }
 
 void CALLBACK DUI_SendSelectionChangedToUnknown(IUnknown *punk, LPARAM lparam)

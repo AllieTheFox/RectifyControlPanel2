@@ -2,35 +2,40 @@
 
 #include "FrameModule.h"
 
-DirectUI::IClassInfo *CFrameModule::Class = nullptr;
 
-HRESULT CFrameModule::QueryInterface(REFIID riid, void **ppv)
+HRESULT CFrameModule::QueryInterface(REFIID riid, void** ppv)
 {
     static const QITAB qit[] =
     {
         QITABENT(CFrameModule, IFrameModule),
-        { 0 },
+        {},
     };
-
     HRESULT hr = QISearch(this, qit, riid, ppv);
     if (FAILED(hr))
     {
         hr = CElementWithSite::QueryInterface(riid, ppv);
     }
-
     return hr;
 }
 
-HRESULT CFrameModule::Create(DirectUI::Element *pParent, DWORD *pdwDeferCookie, DirectUI::Element **ppElement)
+DirectUI::IClassInfo* CFrameModule::Class = nullptr;
+
+DirectUI::IClassInfo* CFrameModule::GetClassInfoW()
 {
-	UNREFERENCED_PARAMETER(pParent);
-	UNREFERENCED_PARAMETER(pdwDeferCookie);
-	UNREFERENCED_PARAMETER(ppElement);
-
-	DUI_ASSERT("Cannot instantiate a CFrameModule via parser.Must derive.");
-
-	return E_NOTIMPL;
+    return Class;
 }
+
+HRESULT CFrameModule::Create(Element* pParent, DWORD* pdwDeferCookie, Element** ppElement)
+{
+    UNREFERENCED_PARAMETER(pParent);
+    UNREFERENCED_PARAMETER(pdwDeferCookie);
+    UNREFERENCED_PARAMETER(ppElement);
+
+    DUI_ASSERT("Cannot instantiate a CFrameModule via parser.Must derive.");
+    return E_NOTIMPL;
+}
+
+static DirectUI::PropertyInfoData dataimpModuleIDProp;
 
 static DirectUI::Value* WINAPI svDefault()
 {
@@ -44,51 +49,51 @@ static DirectUI::Value* WINAPI svDefault()
     return reinterpret_cast<DirectUI::Value*>(&value);
 }
 
-static DirectUI::PropertyInfoData dataimpModuleIDProp;
 static const int vvimpModuleIDProp[] = { 5, -1 };
+
 static const DirectUI::PropertyInfo impModuleIDProp =
 {
-    .pszName = L"ModuleID",
-    .fFlags = DirectUI::PF_Normal,
-    .fGroups = DirectUI::PG_None,
-    .pValidValues = vvimpModuleIDProp,
-    .pEnumMaps = nullptr,
-    .DefaultProc = (&svDefault),
-    .pData = &dataimpModuleIDProp
+    /*pszName*/ L"ModuleID",
+    /*fFlags*/ DirectUI::PF_Normal,
+    /*fGroups*/ DirectUI::PG_None,
+    /*pValidValues*/ vvimpModuleIDProp,
+    /*pEnumMaps*/ nullptr,
+    /*DefaultProc*/ svDefault,
+    /*pData*/ &dataimpModuleIDProp
 };
+
+const DirectUI::PropertyInfo* CFrameModule::ModuleIDProp = &impModuleIDProp;
 
 HRESULT CFrameModule::Register()
 {
     HRESULT hr = CElementWithSite::Register();
     if (SUCCEEDED(hr))
     {
-        static const DirectUI::PropertyInfo const *s_rgProps[] =
+        static const DirectUI::PropertyInfo* const s_rgProps[] =
         {
-            &impModuleIDProp
+            ModuleIDProp
         };
-
         hr = DirectUI::ClassInfo<CFrameModule, CElementWithSite>::RegisterGlobal(g_hinst, L"FrameModule", s_rgProps, ARRAYSIZE(s_rgProps));
     }
-
     return hr;
 }
 
 HRESULT CFrameModule::SetInnerObject(IUnknown *punkInner)
 {
-    DirectUI::Element::RemoveAll();
+    RemoveAll();
 
     HRESULT hr = E_FAIL;
     if (punkInner)
     {
-        IWrappedDUIElement *pwde;
+        IWrappedDUIElement* pwde;
         hr = punkInner->QueryInterface(IID_PPV_ARGS(&pwde));
         if (SUCCEEDED(hr))
         {
-            DirectUI::Element *pe;
-            hr = pwde->GetElement((void **)&pe);
+            Element* pe;
+            hr = pwde->GetElement((void**)&pe);
             if (SUCCEEDED(hr))
             {
-                DirectUI::Element::Add(pe);
+                Add(pe);
             }
             pwde->Release();
         }
@@ -99,7 +104,7 @@ HRESULT CFrameModule::SetInnerObject(IUnknown *punkInner)
 
 HRESULT CFrameModule::GetModuleID(WCHAR** ppszModuleID)
 {
-    DirectUI::Value* pv = DirectUI::Element::GetValue(&impModuleIDProp, 2, nullptr);
+    DirectUI::Value* pv = GetValue(ModuleIDProp, 2, nullptr);
     HRESULT hr = SHStrDup(pv->GetString(), ppszModuleID);
     pv->Release();
     return hr;
@@ -116,7 +121,7 @@ HRESULT ElementWrapper::QueryInterface(REFIID riid, void** ppv)
     static const QITAB qit[] =
     {
         QITABENT(ElementWrapper, IWrappedDUIElement),
-        { 0 },
+        {},
     };
     return QISearch(this, qit, riid, ppv);
 }
@@ -153,7 +158,7 @@ HRESULT CreateWrapperForElement(DirectUI::Element* pe, REFIID riid, void** ppv)
     *ppv = nullptr;
 
     HRESULT hr = E_OUTOFMEMORY;
-    ElementWrapper* pew = new (std::nothrow) ElementWrapper(pe);
+    ElementWrapper* pew = new(std::nothrow) ElementWrapper(pe);
     if (pew)
     {
         hr = pew->QueryInterface(riid, ppv);

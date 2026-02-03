@@ -142,7 +142,7 @@ IFACEMETHODIMP FrameProvider::OptionallyTakeInitialFocus(BOOL *pbTookFocus)
 	DirectUI::HWNDElement *peRoot = (DirectUI::HWNDElement *)DirectUI::XProvider::GetRoot();
 	if (peRoot)
 	{
-		if (peRoot->GetClassInfo()->IsSubclassOf((DirectUI::IClassInfo *)DirectUI::HWNDElement::GetClassInfoPtr()))
+		if (peRoot->GetClassInfoW()->IsSubclassOf((DirectUI::IClassInfo *)DirectUI::HWNDElement::GetClassInfoPtr()))
 		{
 			HWND hwndRoot = peRoot->GetHWND();
 			HWND hwndFocus = GetFocus();
@@ -164,7 +164,7 @@ IFACEMETHODIMP FrameProvider::OptionallyTakeInitialFocus(BOOL *pbTookFocus)
 // IFrameNotificationClient implementation
 IFACEMETHODIMP FrameProvider::LayoutInitialized()
 {
-	DUI_WalkIUnknownElements(DirectUI::XProvider::GetRoot(), (PFNELEMENTCALLBACK)DUI_SetSiteOnUnknown, (LPARAM)static_cast<IDUIElementProviderInit *>(this));
+	DUI_WalkIUnknownElements(DirectUI::XProvider::GetRoot(), DUI_SetSiteOnUnknown, (LPARAM)static_cast<IDUIElementProviderInit *>(this));
 	DUI_WalkIUnknownElements(DirectUI::XProvider::GetRoot(), DUI_SendInitializationToUnknown, 0);
 	return S_OK;
 }
@@ -187,7 +187,7 @@ IFACEMETHODIMP FrameProvider::OnNavigateAway()
 	// This is probably incorrect, but keeping in case its true ^^^
 
 	DUI_WalkIUnknownElements(XProvider::GetRoot(), DUI_SendNavigateAwayToUnknown, 0);
-	DUI_WalkIUnknownElements(XProvider::GetRoot(), (PFNELEMENTCALLBACK)DUI_SetSiteOnUnknown, 0);
+	DUI_WalkIUnknownElements(XProvider::GetRoot(), DUI_SetSiteOnUnknown, 0);
 
 	_peRoot = nullptr;
 	_pe = nullptr;
@@ -200,7 +200,7 @@ IFACEMETHODIMP FrameProvider::OnInnerElementDestroyed()
 	DUI_ASSERT_EXPR(!_peRoot, "We should have received an OnNavigateAway before the OnInnerElementDestroyed");
 	if (_peRoot)
 	{
-		DUI_WalkIUnknownElements(XProvider::GetRoot(), (PFNELEMENTCALLBACK)DUI_SetSiteOnUnknown, 0);
+		DUI_WalkIUnknownElements(XProvider::GetRoot(), DUI_SetSiteOnUnknown, 0);
 		_peRoot = nullptr;
 		_pe = nullptr;
 	}

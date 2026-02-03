@@ -2,7 +2,7 @@
 
 #include "CElementWithIUnknown.h"
 
-HRESULT CALLBACK DUI_SetSiteOnUnknown(IUnknown *punk, IUnknown *punkSite);
+void CALLBACK DUI_SetSiteOnUnknown(IUnknown* punk, LPARAM lparam);
 void CALLBACK DUI_SendSelectionChangedToUnknown(IUnknown *punk, LPARAM lparam);
 void CALLBACK DUI_SendSelectedItemChangedToUnknown(IUnknown *punk, LPARAM lparam);
 void CALLBACK DUI_SendNotificationToUnknown(IUnknown *punk, LPARAM lparam);
