@@ -17,6 +17,8 @@
 #include "RectifyThemeCfgPage.h"
 #include <map>
 
+#include "FocusIndicator.h"
+
 FrameProvider::FrameProvider(HINSTANCE hinst, const WCHAR* pszCommonResidToCreate)
 	: _punkSite(nullptr)
 	, _hinst(hinst)
@@ -29,27 +31,19 @@ FrameProvider::FrameProvider(HINSTANCE hinst, const WCHAR* pszCommonResidToCreat
 
 HRESULT FrameProvider::Init()
 {
-	HRESULT hr = DUIFramework_InitDUI();
-	_hrInit = hr;
-
-	if (FAILED(hr))
+	_hrInit = DUIFramework_InitDUI();;
+	if (FAILED(_hrInit))
 	{
-		return hr;
+		return _hrInit;
 	}
 
-	if (SUCCEEDED(CElementWithSite::Register()))
+	HRESULT hr = E_FAIL;
+	if (SUCCEEDED(CNavigateButton::Register())
+		&& SUCCEEDED(CFrameModule::Register())
+		&& SUCCEEDED(CFocusIndicator::Register()))
 	{
-		hr = CNavigateButton::Register();
-		if (SUCCEEDED(hr))
-		{
-			hr = CFrameModule::Register();
-			if (SUCCEEDED(hr))
-			{
-				hr = S_OK;
-			}
-		}
+		hr = S_OK;
 	}
-
 	return hr;
 }
 

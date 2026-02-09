@@ -125,7 +125,7 @@ STDAPI DllRegisterServer()
 	{
 		return GetLastError();
 	}
-	if (FAILED(StringFromGUID2(CLSID_FolderViewImplElement, szElementClassID, ARRAYSIZE(szElementClassID))))
+	if (FAILED(StringFromGUID2(CLSID_RectifyCplElementProvider, szElementClassID, ARRAYSIZE(szElementClassID))))
 	{
 		return GetLastError();
 	}
@@ -347,7 +347,7 @@ STDAPI DllUnregisterServer()
 	WCHAR szSubKey[MAX_PATH], szFolderClassID[MAX_PATH], szElementID[MAX_PATH];
 
 	//Delete the element provider
-	HRESULT hrCM = StringFromGUID2(CLSID_FolderViewImplElement,
+	HRESULT hrCM = StringFromGUID2(CLSID_RectifyCplElementProvider,
 		szElementID,
 		ARRAYSIZE(szElementID));
 	if (SUCCEEDED(hrCM))

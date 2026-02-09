@@ -44,30 +44,31 @@ DWORD CFolderViewImplClassFactory::Release()
     return cRef;
 }
 
-HRESULT CRectifyCplElementProvider_CreateInstance(IUnknown *punkOuter, _In_ REFIID riid, _Out_ void **ppv)
+HRESULT CRectifyCplElementProvider_CreateInstance(IUnknown* punkOuter, _In_ REFIID riid, _Out_ void** ppv)
 {
     *ppv = nullptr;
-
     if (punkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    FrameProvider *pObj = new (std::nothrow) FrameProvider(g_hinst, L"main");
-    HRESULT hr = pObj ? pObj->Init() : E_OUTOFMEMORY;
+    FrameProvider* pobj = new(std::nothrow) FrameProvider(g_hinst, L"main");
+    HRESULT hr = pobj ? S_OK : E_OUTOFMEMORY;
     if (SUCCEEDED(hr))
     {
-        // Register the main page and theme configuration page elements
-        hr = RectifyMainPage::Register();
-        if (SUCCEEDED(hr))
-        {
-            hr = RectifyThemeCfgPage::Register();
-            if (SUCCEEDED(hr))
-            {
-                hr = pObj->QueryInterface(riid, ppv);
-            }
-        }
-        pObj->Release();
+        hr = pobj->Init();
     }
-
+    if (SUCCEEDED(hr))
+    {
+        hr = RectifyMainPage::Register();
+    }
+    if (SUCCEEDED(hr))
+    {
+        RectifyThemeCfgPage::Register();
+    }
+    if (SUCCEEDED(hr))
+    {
+        hr = pobj->QueryInterface(riid, ppv);
+    }
+    pobj->Release();
     return hr;
 }
 
@@ -93,7 +94,7 @@ HRESULT CFolderViewImplClassFactory::CreateInstance(__in_opt IUnknown* punkOuter
     HRESULT hr = !punkOuter ? S_OK : CLASS_E_NOAGGREGATION;
     if (SUCCEEDED(hr))
     {
-        if (m_rclsid == CLSID_FolderViewImplElement)
+        if (m_rclsid == CLSID_RectifyCplElementProvider)
         {
             hr = CRectifyCplElementProvider_CreateInstance(punkOuter, riid, ppv);
         }

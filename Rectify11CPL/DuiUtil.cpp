@@ -1,6 +1,8 @@
 #include "pch.h"
 
 #include "DuiUtil.h"
+
+#include "CElementWithIUnknown.h"
 #include "FocusIndicator.h"
 
 void CALLBACK DUI_SetSiteOnUnknown(IUnknown* punk, LPARAM lparam)

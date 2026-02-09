@@ -313,7 +313,7 @@ DEFINE_GUID(SID_PerLayoutPropertyBag, 0xA46E5C25, 0xC09C, 0x4CA8, 0x9A, 0x53, 0x
 
 HRESULT RectifyMainPage::_InitNavLinks()
 {
-	auto pLinks = new(std::nothrow) CControlPanelNavLinks();
+	CControlPanelNavLinks* pLinks = new(std::nothrow) CControlPanelNavLinks();
 	if (!pLinks)
 		return E_OUTOFMEMORY;
 
@@ -322,22 +322,21 @@ HRESULT RectifyMainPage::_InitNavLinks()
 	if (SUCCEEDED(hr))
 	{
 		hr = pLinks->AddLinkShellEx(CPNAV_LIST_TASKS, g_hinst, IDS_UNINSTALL, L"C:\\Windows\\Rectify11\\Uninstall.exe", L"", &pLink);
+	}
+	if (SUCCEEDED(hr))
+	{
+		hr = pLinks->AddLinkControlPanel(CPNAV_LIST_SEEALSO, g_hinst, IDS_SYSINFO, L"Microsoft.System", L"", &pLink);
+	}
+	if (SUCCEEDED(hr))
+	{
+		IPropertyBag* ppb;
+		hr = IUnknown_QueryService(_punkSite, SID_PerLayoutPropertyBag, IID_PPV_ARGS(&ppb));
 		if (SUCCEEDED(hr))
 		{
-			hr = pLinks->AddLinkControlPanel(CPNAV_LIST_SEEALSO, g_hinst, IDS_SYSINFO, L"Microsoft.System", L"", &pLink);
-			if (SUCCEEDED(hr))
-			{
-				IPropertyBag* ppb;
-				hr = IUnknown_QueryService(_punkSite, SID_PerLayoutPropertyBag, IID_PPV_ARGS(&ppb));
-				if (SUCCEEDED(hr))
-				{
-					hr = PSPropertyBag_WriteUnknown(ppb, L"ControlPanelNavLinks", pLinks);
-					ppb->Release();
-				}
-			}
+			hr = PSPropertyBag_WriteUnknown(ppb, L"ControlPanelNavLinks", pLinks);
+			ppb->Release();
 		}
 	}
-
 	pLinks->Release();
 	return hr;
 }
@@ -396,20 +395,18 @@ void RectifyMainPage::_UpdateThemetoolStatus()
 	status->SetContentString(statusText.c_str());
 }
 
-IFACEMETHODIMP RectifyMainPage::QueryInterface(REFIID riid, void **ppv)
+IFACEMETHODIMP RectifyMainPage::QueryInterface(REFIID riid, void** ppv)
 {
 	static const QITAB qit[] =
 	{
-		QITABENT(CControlPanelPage, IFrameNotificationClient),
-		{ 0 },
+		QITABENT(RectifyMainPage, IFrameNotificationClient),
+		{},
 	};
-
 	HRESULT hr = QISearch(this, qit, riid, ppv);
 	if (FAILED(hr))
 	{
 		hr = CElementWithSite::QueryInterface(riid, ppv);
 	}
-
 	return hr;
 }
 
