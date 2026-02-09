@@ -1,15 +1,16 @@
 #include "pch.h"
 
 #include "DuiUtil.h"
+#include "FocusIndicator.h"
 
-void CALLBACK DUI_SetSiteOnUnknown(IUnknown* punk, LPARAM lParam)
+void CALLBACK DUI_SetSiteOnUnknown(IUnknown* punk, LPARAM lparam)
 {
-    IUnknown_SetSite(punk, reinterpret_cast<IUnknown*>(lParam));
+    IUnknown_SetSite(punk, reinterpret_cast<IUnknown*>(lparam));
 }
 
-void CALLBACK DUI_SendSelectionChangedToUnknown(IUnknown *punk, LPARAM lparam)
+void CALLBACK DUI_SendSelectionChangedToUnknown(IUnknown* punk, LPARAM lparam)
 {
-    IFrameShellViewClient *pfsvc;
+    IFrameShellViewClient* pfsvc;
     if (SUCCEEDED(punk->QueryInterface(IID_PPV_ARGS(&pfsvc))))
     {
         pfsvc->OnSelectionChanged();
@@ -17,9 +18,9 @@ void CALLBACK DUI_SendSelectionChangedToUnknown(IUnknown *punk, LPARAM lparam)
     }
 }
 
-void CALLBACK DUI_SendSelectedItemChangedToUnknown(IUnknown *punk, LPARAM lparam)
+void CALLBACK DUI_SendSelectedItemChangedToUnknown(IUnknown* punk, LPARAM lparam)
 {
-    IFrameShellViewClient *pfsvc;
+    IFrameShellViewClient* pfsvc;
     if (SUCCEEDED(punk->QueryInterface(IID_PPV_ARGS(&pfsvc))))
     {
         pfsvc->OnSelectedItemChanged();
@@ -27,9 +28,9 @@ void CALLBACK DUI_SendSelectedItemChangedToUnknown(IUnknown *punk, LPARAM lparam
     }
 }
 
-void CALLBACK DUI_SendNotificationToUnknown(IUnknown *punk, LPARAM lparam)
+void CALLBACK DUI_SendNotificationToUnknown(IUnknown* punk, LPARAM lparam)
 {
-    IFrameNotificationClient *pfnc;
+    IFrameNotificationClient* pfnc;
     if (SUCCEEDED(punk->QueryInterface(IID_PPV_ARGS(&pfnc))))
     {
         pfnc->Notify((const WCHAR*)lparam);
@@ -37,9 +38,9 @@ void CALLBACK DUI_SendNotificationToUnknown(IUnknown *punk, LPARAM lparam)
     }
 }
 
-void CALLBACK DUI_SendNavigateAwayToUnknown(IUnknown *punk, LPARAM lparam)
+void CALLBACK DUI_SendNavigateAwayToUnknown(IUnknown* punk, LPARAM lparam)
 {
-    IFrameNotificationClient *pfnc;
+    IFrameNotificationClient* pfnc;
     if (SUCCEEDED(punk->QueryInterface(IID_PPV_ARGS(&pfnc))))
     {
         pfnc->OnNavigateAway();
@@ -47,9 +48,9 @@ void CALLBACK DUI_SendNavigateAwayToUnknown(IUnknown *punk, LPARAM lparam)
     }
 }
 
-void CALLBACK DUI_SendInitializationToUnknown(IUnknown *punk, LPARAM lparam)
+void CALLBACK DUI_SendInitializationToUnknown(IUnknown* punk, LPARAM lparam)
 {
-    IFrameNotificationClient *pfnc;
+    IFrameNotificationClient* pfnc;
     if (SUCCEEDED(punk->QueryInterface(IID_PPV_ARGS(&pfnc))))
     {
         pfnc->LayoutInitialized();
@@ -57,9 +58,9 @@ void CALLBACK DUI_SendInitializationToUnknown(IUnknown *punk, LPARAM lparam)
     }
 }
 
-void CALLBACK DUI_SendFolderChangedToUnknown(IUnknown *punk, LPARAM lparam)
+void CALLBACK DUI_SendFolderChangedToUnknown(IUnknown* punk, LPARAM lparam)
 {
-    IFrameShellViewClient *pfsvc;
+    IFrameShellViewClient* pfsvc;
     if (SUCCEEDED(punk->QueryInterface(IID_PPV_ARGS(&pfsvc))))
     {
         pfsvc->OnFolderChanged();
@@ -67,9 +68,9 @@ void CALLBACK DUI_SendFolderChangedToUnknown(IUnknown *punk, LPARAM lparam)
     }
 }
 
-void CALLBACK DUI_SendContentsChangedToUnknown(IUnknown *punk, LPARAM lparam)
+void CALLBACK DUI_SendContentsChangedToUnknown(IUnknown* punk, LPARAM lparam)
 {
-    IFrameShellViewClient *pfsvc;
+    IFrameShellViewClient* pfsvc;
     if (SUCCEEDED(punk->QueryInterface(IID_PPV_ARGS(&pfsvc))))
     {
         pfsvc->OnContentsChanged();
@@ -77,18 +78,18 @@ void CALLBACK DUI_SendContentsChangedToUnknown(IUnknown *punk, LPARAM lparam)
     }
 }
 
-void DUI_WalkIUnknownElements(DirectUI::Element *pe, PFNELEMENTCALLBACK pfn, LPARAM lparam)
+void DUI_WalkIUnknownElements(DirectUI::Element* pe, PFNELEMENTCALLBACK pfn, LPARAM lparam)
 {
     if (pe)
     {
-        DirectUI::Value *pvChildren;
-        DirectUI::DynamicArray<DirectUI::Element *> *pel = pe->GetChildren(&pvChildren);
+        DirectUI::Value* pvChildren;
+        DirectUI::DynamicArray<DirectUI::Element*>* pel = pe->GetChildren(&pvChildren);
         if (pel)
         {
             for (UINT i = 0; i < pel->GetSize(); ++i)
             {
-                DirectUI::Element *peChild = pel->GetItem(i);
-                IUnknown *punk = CElementWithIUnknown::GetUnknownFromElement(peChild);
+                DirectUI::Element* peChild = pel->GetItem(i);
+                IUnknown* punk = CElementWithIUnknown::GetUnknownFromElement(peChild);
                 if (punk)
                 {
                     pfn(punk, lparam);
@@ -124,15 +125,13 @@ HRESULT WINAPI DUIFramework_UninitDUI()
     return S_OK;
 }
 
-#include "FocusIndicator.h"
-
-HRESULT DUIFramework_SetFocusByFocusIndicator(DirectUI::Element *peStart)
+HRESULT DUIFramework_SetFocusByFocusIndicator(DirectUI::Element* peStart)
 {
     HRESULT hr = E_FAIL;
-    CFocusIndicator *pfi = (CFocusIndicator *)peStart->FindDescendent(DirectUI::StrToID(L"FocusIndicator"));
+    CFocusIndicator* pfi = (CFocusIndicator*)peStart->FindDescendent(DirectUI::StrToID(L"FocusIndicator"));
     if (pfi)
     {
-        DirectUI::Element *peFocus = peStart->FindDescendent(pfi->GetTargetId());
+        DirectUI::Element* peFocus = peStart->FindDescendent(pfi->GetTargetId());
         if (peFocus)
         {
             hr = S_OK;
@@ -140,9 +139,11 @@ HRESULT DUIFramework_SetFocusByFocusIndicator(DirectUI::Element *peStart)
             DirectUI::NavReference nr;
             nr.Init(peFocus, nullptr);
 
-            DirectUI::Element *peElement = peFocus->GetAdjacent(nullptr, 3, &nr, 0x3);
+            DirectUI::Element* peElement = peFocus->GetAdjacent(nullptr, 3, &nr, 0x3);
             if (peElement)
+            {
                 peFocus = peElement;
+            }
             peFocus->SetKeyFocus();
         }
     }

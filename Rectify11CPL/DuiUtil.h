@@ -1,22 +1,20 @@
 #pragma once
 
-#include "CElementWithIUnknown.h"
-
 void CALLBACK DUI_SetSiteOnUnknown(IUnknown* punk, LPARAM lparam);
-void CALLBACK DUI_SendSelectionChangedToUnknown(IUnknown *punk, LPARAM lparam);
-void CALLBACK DUI_SendSelectedItemChangedToUnknown(IUnknown *punk, LPARAM lparam);
-void CALLBACK DUI_SendNotificationToUnknown(IUnknown *punk, LPARAM lparam);
-void CALLBACK DUI_SendNavigateAwayToUnknown(IUnknown *punk, LPARAM lparam);
-void CALLBACK DUI_SendInitializationToUnknown(IUnknown *punk, LPARAM lparam);
-void CALLBACK DUI_SendFolderChangedToUnknown(IUnknown *punk, LPARAM lparam);
-void CALLBACK DUI_SendContentsChangedToUnknown(IUnknown *punk, LPARAM lparam);
+void CALLBACK DUI_SendSelectionChangedToUnknown(IUnknown* punk, LPARAM lparam);
+void CALLBACK DUI_SendSelectedItemChangedToUnknown(IUnknown* punk, LPARAM lparam);
+void CALLBACK DUI_SendNotificationToUnknown(IUnknown* punk, LPARAM lparam);
+void CALLBACK DUI_SendNavigateAwayToUnknown(IUnknown* punk, LPARAM lparam);
+void CALLBACK DUI_SendInitializationToUnknown(IUnknown* punk, LPARAM lparam);
+void CALLBACK DUI_SendFolderChangedToUnknown(IUnknown* punk, LPARAM lparam);
+void CALLBACK DUI_SendContentsChangedToUnknown(IUnknown* punk, LPARAM lparam);
 
-typedef void (CALLBACK *PFNELEMENTCALLBACK)(IUnknown *punk, LPARAM lParam);
-void DUI_WalkIUnknownElements(DirectUI::Element *pe, PFNELEMENTCALLBACK pfn, LPARAM lparam);
+typedef void (CALLBACK *PFNELEMENTCALLBACK)(IUnknown* punk, LPARAM lParam);
+void DUI_WalkIUnknownElements(DirectUI::Element* pe, PFNELEMENTCALLBACK pfn, LPARAM lparam);
 
 HRESULT WINAPI DUIFramework_InitDUI();
 HRESULT WINAPI DUIFramework_UninitDUI();
-HRESULT WINAPI DUIFramework_SetFocusByFocusIndicator(DirectUI::Element *peStart);
+HRESULT WINAPI DUIFramework_SetFocusByFocusIndicator(DirectUI::Element* peStart);
 
 #define GetDUIPropIndirect(get, prop, index)								\
 	*ppv = DirectUI::Element::GetValue(&imp##prop##Prop, index, nullptr);	\
