@@ -7,10 +7,20 @@
 #include "CControlPanelNavLinks.h"
 #include "DuiUtil.h"
 
-DirectUI::IClassInfo *RectifyMainPage::Class = nullptr;
-
 RectifyMainPage::RectifyMainPage()
 	: _punkSite(nullptr)
+	, _pcmbThemes(nullptr)
+	, _pbtnHelp(nullptr)
+	, _pchkMicaForEveryone(nullptr)
+	, _pchkTabbed(nullptr)
+	, _pbtnEnableAdmin(nullptr)
+	, _pbtnRestartExplorer(nullptr)
+	, _pbtnThemetoolInstall(nullptr)
+	, _pchkWin11DefaultMenus(nullptr)
+	, _pchkNilesoftSmall(nullptr)
+	, _pchkNilesoftFull(nullptr)
+	, _pchkClassic(nullptr)
+	, _pchkClassicTransparent(nullptr)
 	, _fAdmin(false)
 	, _pRectifyUtil(nullptr)
 	, _fInitializing(true)
@@ -22,22 +32,12 @@ RectifyMainPage::~RectifyMainPage()
 
 }
 
-HRESULT RectifyMainPage::Register()
-{
-	return DirectUI::ClassInfo<RectifyMainPage, CElementWithSite>::RegisterGlobal(g_hinst, L"RectifyMainPage", nullptr, 0);
-}
-
 HRESULT RectifyMainPage::Create(Element *pParent, DWORD *pdwDeferCookie, Element **ppElement)
 {
 	return CreateAndInit<RectifyMainPage, int>(0, pParent, pdwDeferCookie, ppElement);
 }
 
-DirectUI::IClassInfo *RectifyMainPage::GetClassInfo()
-{
-	return Class;
-}
-
-void RectifyMainPage::OnEvent(DirectUI::Event *iev)
+void RectifyMainPage::OnEvent(DirectUI::Event* iev)
 {
 	if (iev->nStage != DirectUI::GMF_BUBBLED)
 		return;
@@ -48,14 +48,11 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 	if (_fInitializing)
 		return;
 
-	if (iev->peTarget->GetID() == DirectUI::StrToID(L"Link_EnableAdmin"))
+	if (iev->peTarget == _pbtnEnableAdmin)
 	{
 		if (iev->uidType == DirectUI::TouchButton::Click)
 		{
-			IRectifyUtil *utility = ElevationManager::Initialize(_GetMainHwnd());
-			DirectUI::TouchCheckBox *MicaForEveryoneCheckbox = (DirectUI::TouchCheckBox *)FindDescendent(DirectUI::StrToID(L"MicaChk"));
-			DirectUI::TouchCheckBox *TabbedCheckbox = (DirectUI::TouchCheckBox *)FindDescendent(DirectUI::StrToID(L"TabChk"));
-			DirectUI::TouchButton *ThemetoolInstall = (DirectUI::TouchButton *)FindDescendent(DirectUI::StrToID(L"ThemetoolInstall"));
+			IRectifyUtil* utility = ElevationManager::Initialize(_GetMainHwnd());
 			if (utility != NULL)
 			{
 				// Destroy old class
@@ -68,29 +65,25 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 				_fAdmin = TRUE;
 
 				DWORD dwDefer = 0;
-				Element::StartDefer(&dwDefer);
-				iev->peTarget->SetLayoutPos(-3);
-				iev->peTarget->SetVisible(FALSE);
-				ThemetoolInstall->SetEnabled(TRUE);
+				StartDefer(&dwDefer);
 
-				MicaForEveryoneCheckbox->SetEnabled(TRUE);
-				if (MicaForEveryoneCheckbox->GetCheckedState() != DirectUI::CSF_Unchecked)
-					TabbedCheckbox->SetEnabled(TRUE);
+				_pbtnEnableAdmin->SetLayoutPos(-3);
+				_pbtnEnableAdmin->SetVisible(FALSE);
+				_pbtnThemetoolInstall->SetEnabled(TRUE);
 
-
-				DirectUI::CCRadioButton *Win11DefaultMenus = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID(L"Win11DefaultMenus"));
-				DirectUI::CCRadioButton *NilesoftSmall = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID(L"NilesoftSmall"));
-				DirectUI::CCRadioButton *NilesoftFull = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID(L"NilesoftFull"));
-				DirectUI::CCRadioButton *Classic = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID(L"Classic"));
-				DirectUI::CCRadioButton *ClassicTransparent = (DirectUI::CCRadioButton *)FindDescendent(DirectUI::StrToID(L"ClassicTransparent"));
-
-				DirectUI::CCRadioButton *Options[] =
+				_pchkMicaForEveryone->SetEnabled(TRUE);
+				if (_pchkMicaForEveryone->GetCheckedState() != DirectUI::CSF_Unchecked)
 				{
-					Win11DefaultMenus,
-					NilesoftSmall,
-					NilesoftFull,
-					Classic,
-					ClassicTransparent
+					_pchkTabbed->SetEnabled(TRUE);
+				}
+
+				DirectUI::CCRadioButton* Options[] =
+				{
+					_pchkWin11DefaultMenus,
+					_pchkNilesoftSmall,
+					_pchkNilesoftFull,
+					_pchkClassic,
+					_pchkClassicTransparent
 				};
 
 				for (size_t i = 0; i < 5; i++)
@@ -98,34 +91,30 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 					Options[i]->SetEnabled(TRUE);
 				}
 
-				Element::EndDefer(dwDefer);
+				EndDefer(dwDefer);
 			}
 		}
 	}
-	else if (iev->peTarget->GetID() == DirectUI::StrToID(L"BtnRestartExplorer"))
+	else if (iev->peTarget == _pbtnRestartExplorer)
 	{
 		if (iev->uidType == DirectUI::TouchButton::Click)
 		{
 			CRectifyUtil::RestartExplorer();
 
 			// hide restart explorer button
-			iev->peTarget->SetLayoutPos(-3);
-			iev->peTarget->SetVisible(FALSE);
+			_pbtnRestartExplorer->SetLayoutPos(-3);
+			_pbtnRestartExplorer->SetVisible(FALSE);
 		}
 	}
-	else if (iev->peTarget->GetID() == DirectUI::StrToID(L"ThemeCmb"))
+	else if (iev->peTarget == _pcmbThemes)
 	{
 		if (iev->uidType == DirectUI::Combobox::SelectionChange)
 		{
-			DirectUI::TouchCheckBox *MicaForEveryoneCheckbox = (DirectUI::TouchCheckBox *)FindDescendent(DirectUI::StrToID(L"MicaChk"));
-			DirectUI::TouchCheckBox *TabbedCheckbox = (DirectUI::TouchCheckBox *)FindDescendent(DirectUI::StrToID(L"TabChk"));
-			int selection = ((DirectUI::Combobox *)iev->peTarget)->GetSelection();
-
 			ULONG apply_flags = 0;
 
 			// load appy flags
-			HKEY Rectify11;
-			if (RegCreateKey(HKEY_CURRENT_USER, Rectify11PrefsKey, &Rectify11))
+			HKEY hkeyRectify11;
+			if (RegCreateKey(HKEY_CURRENT_USER, Rectify11PrefsKey, &hkeyRectify11))
 			{
 				SHOW_ERROR("Failed to create Rectify11Prefs key");
 				return;
@@ -140,13 +129,13 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 			DWORD IgnoreSoundsVal = 0;
 			DWORD IgnoreScreensaversVal = 0;
 
-			RegQueryValueExW(Rectify11, L"IgnoreBg", 0, NULL, (LPBYTE)&IgnoreBgVal, &size);
-			RegQueryValueExW(Rectify11, L"IgnoreCursors", 0, NULL, (LPBYTE)&IgnoreCursorsVal, &size);
-			RegQueryValueExW(Rectify11, L"IgnoreIcons", 0, NULL, (LPBYTE)&IgnoreIconsVal, &size);
-			RegQueryValueExW(Rectify11, L"IgnoreColors", 0, NULL, (LPBYTE)&IgnoreColorsVal, &size);
-			RegQueryValueExW(Rectify11, L"IgnoreSounds", 0, NULL, (LPBYTE)&IgnoreSoundsVal, &size);
-			RegQueryValueExW(Rectify11, L"IgnoreScreensavers", 0, NULL, (LPBYTE)&IgnoreScreensaversVal, &size);
-			RegCloseKey(Rectify11);
+			RegQueryValueExW(hkeyRectify11, L"IgnoreBg", 0, NULL, (LPBYTE)&IgnoreBgVal, &size);
+			RegQueryValueExW(hkeyRectify11, L"IgnoreCursors", 0, NULL, (LPBYTE)&IgnoreCursorsVal, &size);
+			RegQueryValueExW(hkeyRectify11, L"IgnoreIcons", 0, NULL, (LPBYTE)&IgnoreIconsVal, &size);
+			RegQueryValueExW(hkeyRectify11, L"IgnoreColors", 0, NULL, (LPBYTE)&IgnoreColorsVal, &size);
+			RegQueryValueExW(hkeyRectify11, L"IgnoreSounds", 0, NULL, (LPBYTE)&IgnoreSoundsVal, &size);
+			RegQueryValueExW(hkeyRectify11, L"IgnoreScreensavers", 0, NULL, (LPBYTE)&IgnoreScreensaversVal, &size);
+			RegCloseKey(hkeyRectify11);
 
 			if (IgnoreBgVal)
 			{
@@ -174,6 +163,7 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 			}
 
 			// apply the theme
+			int selection = _pcmbThemes->GetSelection();
 			themetool_set_active(NULL, themes[selection], TRUE, apply_flags, 0);
 			_UpdateThemeGraphic();
 
@@ -186,50 +176,44 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 				_pRectifyUtil->SetMicaForEveryoneEnabled(hasMica, hasTabbed);
 
 				// update checkboxes in case we aren't using a mica theme anymore
-				MicaForEveryoneCheckbox->SetCheckedState(hasMica ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
-				TabbedCheckbox->SetCheckedState(hasTabbed ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
+				_pchkMicaForEveryone->SetCheckedState(hasMica ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
+				_pchkTabbed->SetCheckedState(hasTabbed ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
 			}
 		}
 	}
-	else if (iev->peTarget->GetID() == DirectUI::StrToID(L"buttonHelp"))
+	else if (iev->peTarget == _pbtnHelp)
 	{
 		if (iev->uidType == DirectUI::Button::Click)
 		{
-			ShellExecute(0, 0, TEXT("http://rectify11.net"), 0, 0, SW_SHOW);
+			ShellExecute(nullptr, nullptr, TEXT("http://rectify11.net"), nullptr, nullptr, SW_SHOW);
 		}
 	}
-	else if (iev->peTarget->GetID() == DirectUI::StrToID(L"MicaChk"))
+	else if (iev->peTarget == _pchkMicaForEveryone)
 	{
-		DirectUI::TouchCheckBox *MicaForEveryoneCheckbox = (DirectUI::TouchCheckBox *)iev->peTarget;
-		DirectUI::TouchCheckBox *TabbedCheckbox = (DirectUI::TouchCheckBox *)GetRoot()->FindDescendent(DirectUI::StrToID(L"TabChk"));
-		DirectUI::Combobox *ThemeCombo = (DirectUI::Combobox *)GetRoot()->FindDescendent(DirectUI::StrToID(L"ThemeCmb"));
 		if (iev->uidType == DirectUI::TouchButton::Click)
 		{
-			DirectUI::CheckedStateFlags MicaEnabled2 = MicaForEveryoneCheckbox->GetCheckedState();
-			DirectUI::CheckedStateFlags TabbedEnabled = TabbedCheckbox->GetCheckedState();
+			DirectUI::CheckedStateFlags MicaEnabled2 = _pchkMicaForEveryone->GetCheckedState();
+			DirectUI::CheckedStateFlags TabbedEnabled = _pchkTabbed->GetCheckedState();
 
 			_pRectifyUtil->SetMicaForEveryoneEnabled(MicaEnabled2 == DirectUI::CSF_Checked ? TRUE : FALSE, TabbedEnabled ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
 
 			// Enable/disable the tabbed checkbox
-			if (TabbedCheckbox != NULL)
+			if (_pchkTabbed != nullptr)
 			{
-				TabbedCheckbox->SetEnabled(MicaEnabled2 == DirectUI::CSF_Checked ? TRUE : FALSE);
+				_pchkTabbed->SetEnabled(MicaEnabled2 == DirectUI::CSF_Checked ? TRUE : FALSE);
 			}
 		}
 	}
-	else if (iev->peTarget->GetID() == DirectUI::StrToID(L"TabChk"))
+	else if (iev->peTarget == _pchkTabbed)
 	{
-		DirectUI::TouchCheckBox *TabbedCheckbox = (DirectUI::TouchCheckBox *)iev->peTarget;
-		DirectUI::Combobox *ThemeCombo = (DirectUI::Combobox *)FindDescendent(DirectUI::StrToID(L"ThemeCmb"));
-
 		if (iev->uidType == DirectUI::TouchButton::Click)
 		{
-			_pRectifyUtil->SetMicaForEveryoneEnabled(TRUE, TabbedCheckbox->GetCheckedState() == DirectUI::CSF_Checked ? TRUE : FALSE);
+			_pRectifyUtil->SetMicaForEveryoneEnabled(TRUE, _pchkTabbed->GetCheckedState() == DirectUI::CSF_Checked ? TRUE : FALSE);
 		}
 	}
-	else if (iev->peTarget->GetID() == DirectUI::StrToID(L"ThemetoolInstall"))
+	else if (iev->peTarget == _pbtnThemetoolInstall)
 	{
-		iev->peTarget->SetEnabled(FALSE);
+		_pbtnThemetoolInstall->SetEnabled(FALSE);
 		HRESULT hr = _pRectifyUtil->InstallThemeTool();
 		if (FAILED(hr))
 		{
@@ -241,7 +225,7 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 		}
 
 		_UpdateThemetoolStatus();
-		iev->peTarget->SetEnabled(TRUE);
+		_pbtnThemetoolInstall->SetEnabled(TRUE);
 	}
 	// handle menu section
 	if (iev->uidType == DirectUI::Button::Click && !wcscmp(iev->peTarget->GetClassInfoW()->GetName(), DirectUI::CCRadioButton::GetClassInfoPtr()->GetName()))
@@ -285,11 +269,16 @@ void RectifyMainPage::OnEvent(DirectUI::Event *iev)
 	}
 }
 
-void RectifyMainPage::_ShowRestartExplorer()
+DirectUI::IClassInfo* RectifyMainPage::Class = nullptr;
+
+DirectUI::IClassInfo* RectifyMainPage::GetClassInfo()
 {
-	DirectUI::TouchButton *BtnRestartExplorer = (DirectUI::TouchButton *)FindDescendent(DirectUI::StrToID(L"BtnRestartExplorer"));
-	BtnRestartExplorer->SetLayoutPos(0);
-	BtnRestartExplorer->SetVisible(TRUE);
+	return Class;
+}
+
+HRESULT RectifyMainPage::Register()
+{
+	return DirectUI::ClassInfo<RectifyMainPage, CElementWithSite>::RegisterGlobal(g_hinst, L"RectifyMainPage", nullptr, 0);
 }
 
 void RectifyMainPage::_UpdateThemeGraphic()
@@ -300,8 +289,8 @@ void RectifyMainPage::_UpdateThemeGraphic()
 	{
 		return;
 	}
-	DirectUI::Value *bitmap = DirectUI::Value::CreateGraphic(bmp, 3, 0xffffffff, false, false, false);
-	Element *PreviewElement = FindDescendent(DirectUI::StrToID(L"ThemePreview"));
+	DirectUI::Value* bitmap = DirectUI::Value::CreateGraphic(bmp, 3, 0xffffffff, false, false, false);
+	Element* PreviewElement = FindDescendent(DirectUI::StrToID(L"ThemePreview"));
 	if (PreviewElement != NULL)
 	{
 		PreviewElement->SetValue(Element::ContentProp, 1, bitmap);
@@ -309,7 +298,256 @@ void RectifyMainPage::_UpdateThemeGraphic()
 	bitmap->Release();
 }
 
+void RectifyMainPage::_ShowRestartExplorer()
+{
+	_pbtnRestartExplorer->SetLayoutPos(0);
+	_pbtnRestartExplorer->SetVisible(TRUE);
+}
+
 DEFINE_GUID(SID_PerLayoutPropertyBag, 0xA46E5C25, 0xC09C, 0x4CA8, 0x9A, 0x53, 0x49, 0xCF, 0x7F, 0x86, 0x55, 0x25);
+
+void RectifyMainPage::OnDestroy()
+{
+	if (_pRectifyUtil != NULL)
+	{
+		_pRectifyUtil->Release();
+		_pRectifyUtil = NULL;
+	}
+
+	Element::OnDestroy();
+}
+
+IFACEMETHODIMP RectifyMainPage::QueryInterface(REFIID riid, void** ppv)
+{
+	static const QITAB qit[] =
+	{
+		QITABENT(RectifyMainPage, IFrameNotificationClient),
+		{},
+	};
+	HRESULT hr = QISearch(this, qit, riid, ppv);
+	if (FAILED(hr))
+	{
+		hr = CElementWithSite::QueryInterface(riid, ppv);
+	}
+	return hr;
+}
+
+HRESULT RectifyMainPage::LayoutInitialized()
+{
+	CControlPanelPage::LayoutInitialized();
+
+	HRESULT hr = IUnknown_GetSite(static_cast<IObjectWithSite *>(this), IID_PPV_ARGS(&_punkSite));
+	if (SUCCEEDED(hr))
+	{
+		DUI_WalkIUnknownElements(this, (PFNELEMENTCALLBACK)DUI_SetSiteOnUnknown, (LPARAM)_punkSite);
+	}
+
+	hr = themetool_init();
+	if (hr != S_OK && hr != HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED))
+	{
+#ifdef ERROR_MESSAGES
+		MessageBox(NULL, TEXT("Failed to initialize SecureUXTheme ThemeTool. Theme information will not be loaded. This may be due to the lack of the ThemeDll.dll in C:\\Windows\\Rectify11\\RectifyControlPanel"), TEXT("FrameProvider::LayoutInitialized"), MB_ICONERROR);
+#endif
+	}
+
+	_pRectifyUtil = (IRectifyUtil*)new CRectifyUtil();
+	_InitNavLinks();
+
+	_pcmbThemes = static_cast<DirectUI::Combobox*>(FindDescendent(DirectUI::StrToID(L"ThemeCmb")));
+	_pbtnHelp = static_cast<DirectUI::Button*>(FindDescendent(DirectUI::StrToID(L"buttonHelp")));
+	_pchkMicaForEveryone = static_cast<DirectUI::TouchCheckBox*>(FindDescendent(DirectUI::StrToID(L"MicaChk")));
+	_pchkTabbed = static_cast<DirectUI::TouchCheckBox*>(FindDescendent(DirectUI::StrToID(L"TabChk")));
+
+	Element* version = FindDescendent(DirectUI::StrToID(L"RectifyVersion"));
+	_pbtnEnableAdmin = static_cast<DirectUI::TouchButton*>(FindDescendent(DirectUI::StrToID(L"Link_EnableAdmin")));
+
+	_pbtnRestartExplorer = static_cast<DirectUI::TouchButton*>(FindDescendent(DirectUI::StrToID(L"BtnRestartExplorer")));
+	_pbtnThemetoolInstall = static_cast<DirectUI::TouchButton*>(FindDescendent(DirectUI::StrToID(L"ThemetoolInstall")));
+
+	_pchkWin11DefaultMenus = static_cast<DirectUI::CCRadioButton*>(FindDescendent(DirectUI::StrToID(L"Win11DefaultMenus")));
+	_pchkNilesoftSmall = static_cast<DirectUI::CCRadioButton*>(FindDescendent(DirectUI::StrToID(L"NilesoftSmall")));
+	_pchkNilesoftFull = static_cast<DirectUI::CCRadioButton*>(FindDescendent(DirectUI::StrToID(L"NilesoftFull")));
+	_pchkClassic = static_cast<DirectUI::CCRadioButton*>(FindDescendent(DirectUI::StrToID(L"Classic")));
+	_pchkClassicTransparent = static_cast<DirectUI::CCRadioButton*>(FindDescendent(DirectUI::StrToID(L"ClassicTransparent")));
+
+	DirectUI::CCRadioButton* Options[] =
+	{
+		_pchkWin11DefaultMenus,
+		_pchkNilesoftSmall,
+		_pchkNilesoftFull,
+		_pchkClassic,
+		_pchkClassicTransparent
+	};
+
+	if (_pcmbThemes != NULL)
+	{
+		WCHAR value[255] = { 0 };
+		PVOID pvData = value;
+		DWORD size = sizeof(value);
+		RegGetValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager", L"DllName", RRF_RT_REG_SZ, 0, pvData, &size);
+		std::wstring msstylePath = std::wstring((const WCHAR*)pvData);
+		int k = 0;
+		ULONG themeCount = 0;
+		if (SUCCEEDED(themetool_get_theme_count(&themeCount)))
+		{
+			for (ULONG i = 0; i < themeCount; i++)
+			{
+				ITheme *theme = NULL;
+				if (SUCCEEDED(themetool_get_theme(i, &theme)))
+				{
+					std::wstring nameBuffer = std::wstring(255, '\0');
+					theme->GetDisplayName(nameBuffer);
+
+					if (nameBuffer.starts_with(L"Rectify11"))
+					{
+						_pcmbThemes->AddString(nameBuffer.c_str());
+						std::wstring pathBuff = std::wstring();
+						theme->GetVisualStyle(pathBuff);
+						std::wstring msstylePath = std::wstring((const WCHAR*)pvData);
+
+						std::wstring msstylePathClean = msstylePath;
+
+						const size_t last_slash_idx = msstylePathClean.find_last_of(L"\\/");
+						if (std::string::npos != last_slash_idx)
+						{
+							msstylePathClean.erase(0, last_slash_idx + 1);
+						}
+
+						// Remove extension if present.
+						const size_t period_idx = msstylePathClean.rfind('.');
+						if (std::string::npos != period_idx)
+						{
+							msstylePathClean.erase(period_idx);
+						}
+
+						ThemesMap[k] = msstylePathClean;
+						if (pathBuff == msstylePath)
+						{
+							_pcmbThemes->SetSelection(k);
+						}
+						themes.push_back(i);
+						k++;
+					}
+				}
+				themetool_theme_release(theme);
+			}
+		}
+		else
+		{
+#ifdef ERROR_MESSAGES
+			MessageBox(NULL, TEXT("Failed to count the amount of themes"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
+#endif // 0
+		}
+
+		if (version != NULL)
+		{
+			WCHAR value[255] = { 0 };
+			PVOID pvData = value;
+			DWORD size = sizeof(value);
+			LONG result = RegGetValue(HKEY_LOCAL_MACHINE, L"Software\\Rectify11", L"Version", RRF_RT_REG_SZ, 0, pvData, &size);
+			std::wstring vstr = std::wstring(L"");
+			if (result == 0)
+			{
+				WCHAR versionstr[1024];
+				if (FAILED(LoadStringW(g_hinst, IDS_VERSION, versionstr, 1023)))
+				{
+					wcscpy_s(versionstr, L"[VERSION STRING MISSING]: ");
+				}
+				vstr += versionstr;
+				vstr += L" ";
+				vstr += value;
+			}
+			else
+			{
+				WCHAR versionstr[1024];
+				WCHAR notapplicable[1024];
+				if (FAILED(LoadStringW(g_hinst, IDS_VERSION, versionstr, 1023)))
+				{
+					wcscpy_s(versionstr, L"[VERSION STRING MISSING]: ");
+				}
+				if (FAILED(LoadStringW(g_hinst, IDS_NA, notapplicable, 1023)))
+				{
+					wcscpy_s(notapplicable, L"[N/A STRING MISSING]: ");
+				}
+
+				vstr += versionstr;
+				vstr += L" ";
+				vstr += notapplicable;
+			}
+			version->SetContentString(vstr.c_str());
+		}
+	}
+
+	if (_pchkMicaForEveryone != NULL)
+	{
+		_pchkMicaForEveryone->SetToggleOnClick(true);
+		BOOL MicaEnabled;
+		BOOL TabbedEnabled;
+		_pRectifyUtil->GetMicaSettings(&MicaEnabled, &TabbedEnabled);
+
+		_pchkMicaForEveryone->SetCheckedState(MicaEnabled ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
+
+		if (!MicaEnabled && _pchkTabbed != NULL)
+		{
+			_pchkTabbed->SetEnabled(FALSE);
+		}
+	}
+
+	if (_pchkTabbed != NULL)
+	{
+		BOOL MicaEnabled;
+		BOOL TabbedEnabled;
+		_pRectifyUtil->GetMicaSettings(&MicaEnabled, &TabbedEnabled);
+
+		_pchkTabbed->SetToggleOnClick(true);
+		_pchkTabbed->SetCheckedState(MicaEnabled ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
+	}
+
+	if (_pbtnRestartExplorer != NULL)
+	{
+		_pbtnRestartExplorer->SetLayoutPos(-3);
+		_pbtnRestartExplorer->SetVisible(FALSE);
+	}
+
+	DWORD menuIndex;
+
+	for (size_t i = 0; i < 5; i++)
+	{
+		if (!_fAdmin)
+			Options[i]->SetEnabled(FALSE);
+		else
+			Options[i]->SetEnabled(TRUE);
+	}
+	if (SUCCEEDED(_pRectifyUtil->GetCurrentMenuIndex(&menuIndex)))
+	{
+		Options[menuIndex]->SetSelected(true);
+	}
+
+	if (_fAdmin)
+	{
+		_pbtnEnableAdmin->SetLayoutPos(-3);
+		_pbtnEnableAdmin->SetVisible(FALSE);
+		_pbtnThemetoolInstall->SetEnabled(TRUE);
+	}
+	else
+	{
+		_pchkMicaForEveryone->SetEnabled(FALSE);
+		_pchkTabbed->SetEnabled(FALSE);
+		_pbtnThemetoolInstall->SetEnabled(FALSE);
+	}
+
+	_UpdateThemetoolStatus();
+
+	_UpdateThemeGraphic();
+	_fInitializing = false;
+
+	return S_OK;
+}
+
+HRESULT RectifyMainPage::OnInnerElementDestroyed()
+{
+	return S_OK;
+}
 
 HRESULT RectifyMainPage::_InitNavLinks()
 {
@@ -395,230 +633,6 @@ void RectifyMainPage::_UpdateThemetoolStatus()
 	status->SetContentString(statusText.c_str());
 }
 
-IFACEMETHODIMP RectifyMainPage::QueryInterface(REFIID riid, void** ppv)
-{
-	static const QITAB qit[] =
-	{
-		QITABENT(RectifyMainPage, IFrameNotificationClient),
-		{},
-	};
-	HRESULT hr = QISearch(this, qit, riid, ppv);
-	if (FAILED(hr))
-	{
-		hr = CElementWithSite::QueryInterface(riid, ppv);
-	}
-	return hr;
-}
-
-HRESULT RectifyMainPage::LayoutInitialized()
-{
-	CControlPanelPage::LayoutInitialized();
-
-	HRESULT hr = IUnknown_GetSite(static_cast<IObjectWithSite *>(this), IID_PPV_ARGS(&_punkSite));
-	if (SUCCEEDED(hr))
-	{
-		DUI_WalkIUnknownElements(this, (PFNELEMENTCALLBACK)DUI_SetSiteOnUnknown, (LPARAM)_punkSite);
-	}
-
-	hr = themetool_init();
-	if (hr != S_OK && hr != HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED))
-	{
-#ifdef ERROR_MESSAGES
-		MessageBox(NULL, TEXT("Failed to initialize SecureUXTheme ThemeTool. Theme information will not be loaded. This may be due to the lack of the ThemeDll.dll in C:\\Windows\\Rectify11\\RectifyControlPanel"), TEXT("FrameProvider::LayoutInitialized"), MB_ICONERROR);
-#endif
-	}
-
-	Element *root = GetRoot();
-	_pRectifyUtil = (IRectifyUtil *)new CRectifyUtil();
-	_InitNavLinks();
-
-	DirectUI::Combobox *ThemeCombo = (DirectUI::Combobox *)root->FindDescendent(DirectUI::StrToID(L"ThemeCmb"));
-	DirectUI::Button *HelpButton = (DirectUI::Button *)root->FindDescendent(DirectUI::StrToID(L"buttonHelp"));
-	DirectUI::TouchCheckBox *MicaForEveryoneCheckbox = (DirectUI::TouchCheckBox *)root->FindDescendent(DirectUI::StrToID(L"MicaChk"));
-	DirectUI::TouchCheckBox *TabbedCheckbox = (DirectUI::TouchCheckBox *)root->FindDescendent(DirectUI::StrToID(L"TabChk"));
-	Element *version = root->FindDescendent(DirectUI::StrToID(L"RectifyVersion"));
-	DirectUI::TouchButton *enableAdmin = (DirectUI::TouchButton *)root->FindDescendent(DirectUI::StrToID(L"Link_EnableAdmin"));
-	DirectUI::TouchButton *BtnRestartExplorer = (DirectUI::TouchButton *)root->FindDescendent(DirectUI::StrToID(L"BtnRestartExplorer"));
-	DirectUI::TouchButton *ThemetoolInstall = (DirectUI::TouchButton *)root->FindDescendent(DirectUI::StrToID(L"ThemetoolInstall"));
-
-	DirectUI::CCRadioButton *Win11DefaultMenus = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID(L"Win11DefaultMenus"));
-	DirectUI::CCRadioButton *NilesoftSmall = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID(L"NilesoftSmall"));
-	DirectUI::CCRadioButton *NilesoftFull = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID(L"NilesoftFull"));
-	DirectUI::CCRadioButton *Classic = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID(L"Classic"));
-	DirectUI::CCRadioButton *ClassicTransparent = (DirectUI::CCRadioButton *)root->FindDescendent(DirectUI::StrToID(L"ClassicTransparent"));
-
-	DirectUI::CCRadioButton *Options[] = { Win11DefaultMenus, NilesoftSmall, NilesoftFull, Classic, ClassicTransparent };
-
-	if (ThemeCombo != NULL)
-	{
-		WCHAR value[255] = { 0 };
-		PVOID pvData = value;
-		DWORD size = sizeof(value);
-		RegGetValue(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager", L"DllName", RRF_RT_REG_SZ, 0, pvData, &size);
-		std::wstring msstylePath = std::wstring((const WCHAR*)pvData);
-		int k = 0;
-		ULONG themeCount = 0;
-		if (SUCCEEDED(themetool_get_theme_count(&themeCount)))
-		{
-			for (ULONG i = 0; i < themeCount; i++)
-			{
-				ITheme *theme = NULL;
-				if (SUCCEEDED(themetool_get_theme(i, &theme)))
-				{
-					std::wstring nameBuffer = std::wstring(255, '\0');
-					theme->GetDisplayName(nameBuffer);
-
-					if (nameBuffer.starts_with(L"Rectify11"))
-					{
-						ThemeCombo->AddString(nameBuffer.c_str());
-						std::wstring pathBuff = std::wstring();
-						theme->GetVisualStyle(pathBuff);
-						std::wstring msstylePath = std::wstring((const WCHAR*)pvData);
-
-						std::wstring msstylePathClean = msstylePath;
-
-						const size_t last_slash_idx = msstylePathClean.find_last_of(L"\\/");
-						if (std::string::npos != last_slash_idx)
-						{
-							msstylePathClean.erase(0, last_slash_idx + 1);
-						}
-
-						// Remove extension if present.
-						const size_t period_idx = msstylePathClean.rfind('.');
-						if (std::string::npos != period_idx)
-						{
-							msstylePathClean.erase(period_idx);
-						}
-
-						ThemesMap[k] = msstylePathClean;
-						if (pathBuff == msstylePath)
-						{
-							ThemeCombo->SetSelection(k);
-						}
-						themes.push_back(i);
-						k++;
-					}
-				}
-				themetool_theme_release(theme);
-			}
-		}
-		else
-		{
-#ifdef ERROR_MESSAGES
-			MessageBox(NULL, TEXT("Failed to count the amount of themes"), TEXT("CElementProvider::LayoutInitialized"), MB_ICONERROR);
-#endif // 0
-		}
-
-		if (version != NULL)
-		{
-			WCHAR value[255] = { 0 };
-			PVOID pvData = value;
-			DWORD size = sizeof(value);
-			LONG result = RegGetValue(HKEY_LOCAL_MACHINE, L"Software\\Rectify11", L"Version", RRF_RT_REG_SZ, 0, pvData, &size);
-			std::wstring vstr = std::wstring(L"");
-			if (result == 0)
-			{
-				WCHAR versionstr[1024];
-				if (FAILED(LoadStringW(g_hinst, IDS_VERSION, versionstr, 1023)))
-				{
-					wcscpy_s(versionstr, L"[VERSION STRING MISSING]: ");
-				}
-				vstr += versionstr;
-				vstr += L" ";
-				vstr += value;
-			}
-			else
-			{
-				WCHAR versionstr[1024];
-				WCHAR notapplicable[1024];
-				if (FAILED(LoadStringW(g_hinst, IDS_VERSION, versionstr, 1023)))
-				{
-					wcscpy_s(versionstr, L"[VERSION STRING MISSING]: ");
-				}
-				if (FAILED(LoadStringW(g_hinst, IDS_NA, notapplicable, 1023)))
-				{
-					wcscpy_s(notapplicable, L"[N/A STRING MISSING]: ");
-				}
-
-				vstr += versionstr;
-				vstr += L" ";
-				vstr += notapplicable;
-			}
-			version->SetContentString(vstr.c_str());
-		}
-	}
-
-	if (MicaForEveryoneCheckbox != NULL)
-	{
-		MicaForEveryoneCheckbox->SetToggleOnClick(true);
-		BOOL MicaEnabled;
-		BOOL TabbedEnabled;
-		_pRectifyUtil->GetMicaSettings(&MicaEnabled, &TabbedEnabled);
-
-		MicaForEveryoneCheckbox->SetCheckedState(MicaEnabled ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
-
-		if (!MicaEnabled && TabbedCheckbox != NULL)
-		{
-			TabbedCheckbox->SetEnabled(FALSE);
-		}
-	}
-
-	if (TabbedCheckbox != NULL)
-	{
-		BOOL MicaEnabled;
-		BOOL TabbedEnabled;
-		_pRectifyUtil->GetMicaSettings(&MicaEnabled, &TabbedEnabled);
-
-		TabbedCheckbox->SetToggleOnClick(true);
-		TabbedCheckbox->SetCheckedState(MicaEnabled ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
-	}
-
-	if (BtnRestartExplorer != NULL)
-	{
-		BtnRestartExplorer->SetLayoutPos(-3);
-		BtnRestartExplorer->SetVisible(FALSE);
-	}
-
-	DWORD menuIndex;
-
-	for (size_t i = 0; i < 5; i++)
-	{
-		if (!_fAdmin)
-			Options[i]->SetEnabled(FALSE);
-		else
-			Options[i]->SetEnabled(TRUE);
-	}
-	if (SUCCEEDED(_pRectifyUtil->GetCurrentMenuIndex(&menuIndex)))
-	{
-		Options[menuIndex]->SetSelected(true);
-	}
-
-	if (_fAdmin)
-	{
-		enableAdmin->SetLayoutPos(-3);
-		enableAdmin->SetVisible(FALSE);
-		ThemetoolInstall->SetEnabled(TRUE);
-	}
-	else
-	{
-		MicaForEveryoneCheckbox->SetEnabled(FALSE);
-		TabbedCheckbox->SetEnabled(FALSE);
-		ThemetoolInstall->SetEnabled(FALSE);
-	}
-
-	_UpdateThemetoolStatus();
-
-	_UpdateThemeGraphic();
-	_fInitializing = false;
-
-	return S_OK;
-}
-
-HRESULT RectifyMainPage::OnInnerElementDestroyed()
-{
-	return S_OK;
-}
-
 HWND RectifyMainPage::_GetMainHwnd()
 {
 	GUID SID_STopLevelBrowser = {};
@@ -640,15 +654,4 @@ HWND RectifyMainPage::_GetMainHwnd()
 	}
 
 	return result;
-}
-
-void RectifyMainPage::OnDestroy()
-{
-	if (_pRectifyUtil != NULL)
-	{
-		_pRectifyUtil->Release();
-		_pRectifyUtil = NULL;
-	}
-
-	Element::OnDestroy();
 }

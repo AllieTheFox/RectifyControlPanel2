@@ -40,6 +40,22 @@ private:
 	HWND _GetMainHwnd();
 
 	IUnknown* _punkSite;
+
+	// Elements within the CPL page
+	DirectUI::Combobox*			_pcmbThemes;
+	DirectUI::Button*			_pbtnHelp;
+	DirectUI::TouchCheckBox*	_pchkMicaForEveryone;
+	DirectUI::TouchCheckBox*	_pchkTabbed;
+	DirectUI::TouchButton*		_pbtnEnableAdmin;
+	DirectUI::TouchButton*		_pbtnRestartExplorer;
+	DirectUI::TouchButton*		_pbtnThemetoolInstall;
+	DirectUI::CCRadioButton*	_pchkWin11DefaultMenus;
+	DirectUI::CCRadioButton*	_pchkNilesoftSmall;
+	DirectUI::CCRadioButton*	_pchkNilesoftFull;
+	DirectUI::CCRadioButton*	_pchkClassic;
+	DirectUI::CCRadioButton*	_pchkClassicTransparent;
+
+
 	BOOL _fAdmin;
 	IRectifyUtil* _pRectifyUtil;
 	bool _fInitializing;
