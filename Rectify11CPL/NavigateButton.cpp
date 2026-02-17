@@ -2,8 +2,6 @@
 
 #include "NavigateButton.h"
 
-DirectUI::IClassInfo* CNavigateButton::Class = nullptr;
-
 HRESULT TranslateCplCanonicalName(const WCHAR* pszCanonicalName, WCHAR* pszNamespaceName, UINT cch)
 {
     IOpenControlPanel* pocp;
@@ -13,22 +11,20 @@ HRESULT TranslateCplCanonicalName(const WCHAR* pszCanonicalName, WCHAR* pszNames
         hr = pocp->GetPath(pszCanonicalName, pszNamespaceName, cch);
         if (FAILED(hr))
         {
-            hr = StringCchCopy(pszNamespaceName, cch, pszCanonicalName);
+            hr = StringCchCopyW(pszNamespaceName, cch, pszCanonicalName);
         }
         pocp->Release();
     }
-
     return hr;
 }
 
-HRESULT CNavigateButton::Create(DirectUI::Element* pParent, DWORD* pdwDeferCookie, DirectUI::Element** ppElement)
+HRESULT CNavigateButton::Create(Element* pParent, DWORD* pdwDeferCookie, Element** ppElement)
 {
     HRESULT hr = CreateAndInit<CNavigateButton, UINT>(0, pParent, pdwDeferCookie, ppElement);
     if (SUCCEEDED(hr))
     {
         hr = (*ppElement)->SetActive(1);
     }
-
     return hr;
 }
 
@@ -48,56 +44,57 @@ void CNavigateButton::OnEvent(DirectUI::Event* pEvent)
         }
         pvShellExecute->Release();
     }
-
-    DirectUI::Element::OnEvent(pEvent);
+    Element::OnEvent(pEvent);
 }
+
+DirectUI::IClassInfo* CNavigateButton::Class = nullptr;
 
 DirectUI::IClassInfo* CNavigateButton::GetClassInfoW()
 {
-    return CElementWithSite::GetClassInfoW();
+    return Class;
 }
 
-static const int vvimpNavigationTargetRootProp[] = { 5, -1 };
 static DirectUI::PropertyInfoData dataimpNavigationTargetRootProp;
-static const DirectUI::PropertyInfo impNavigationTargetRootProp =
+static const int vvimpNavigationTargetRootProp[] = { 5, -1 };
+static DirectUI::PropertyInfo impNavigationTargetRootProp =
 {
-    .pszName = L"navigationtargetroot",
-    .fFlags = DirectUI::PF_Normal,
-    .fGroups = DirectUI::PG_None,
-    .pValidValues = vvimpNavigationTargetRootProp,
-    .pEnumMaps = nullptr,
-    .DefaultProc = &DirectUI::Value::GetStringNull,
-    .pData = &dataimpNavigationTargetRootProp
+    /*pszName*/ L"navigationtargetroot",
+    /*fFlags*/ DirectUI::PF_Normal,
+    /*fGroups*/ DirectUI::PG_None,
+    /*pValidValues*/ vvimpNavigationTargetRootProp,
+    /*pEnumMaps*/ nullptr,
+    /*DefaultProc*/ &DirectUI::Value::GetStringNull,
+    /*pData*/ &dataimpNavigationTargetRootProp
 };
 
 const DirectUI::PropertyInfo* CNavigateButton::NavigationTargetRootProp = &impNavigationTargetRootProp;
 
-static const int vvimpNavigationTargetRelativeProp[] = { 5, -1 };
 static DirectUI::PropertyInfoData dataimpNavigationTargetRelativeProp;
-static const DirectUI::PropertyInfo impNavigationTargetRelativeProp =
+static const int vvimpNavigationTargetRelativeProp[] = { 5, -1 };
+static DirectUI::PropertyInfo impNavigationTargetRelativeProp =
 {
-    .pszName = L"navigationtargetrelative",
-    .fFlags = DirectUI::PF_Normal,
-    .fGroups = DirectUI::PG_None,
-    .pValidValues = vvimpNavigationTargetRelativeProp,
-    .pEnumMaps = nullptr,
-    .DefaultProc = &DirectUI::Value::GetStringNull,
-    .pData = &dataimpNavigationTargetRelativeProp
+    /*pszName*/ L"navigationtargetrelative",
+    /*fFlags*/ DirectUI::PF_Normal,
+    /*fGroups*/ DirectUI::PG_None,
+    /*pValidValues*/ vvimpNavigationTargetRelativeProp,
+    /*pEnumMaps*/ nullptr,
+    /*DefaultProc*/ &DirectUI::Value::GetStringNull,
+    /*pData*/ &dataimpNavigationTargetRelativeProp
 };
 
 const DirectUI::PropertyInfo* CNavigateButton::NavigationTargetRelativeProp = &impNavigationTargetRelativeProp;
 
 static DirectUI::PropertyInfoData dataimpNoBackstackProp;
 static const int vvimpNoBackstackProp[] = { 5, -1 };
-static const DirectUI::PropertyInfo impNoBackstackProp =
+static DirectUI::PropertyInfo impNoBackstackProp =
 {
-    .pszName = L"nobackstack",
-    .fFlags = DirectUI::PF_Normal,
-    .fGroups = DirectUI::PG_None,
-    .pValidValues = vvimpNoBackstackProp,
-    .pEnumMaps = nullptr,
-    .DefaultProc = &DirectUI::Value::GetStringNull,
-    .pData = &dataimpNoBackstackProp
+    /*pszName*/ L"nobackstack",
+    /*fFlags*/ DirectUI::PF_Normal,
+    /*fGroups*/ DirectUI::PG_None,
+    /*pValidValues*/ vvimpNoBackstackProp,
+    /*pEnumMaps*/ nullptr,
+    /*DefaultProc*/ &DirectUI::Value::GetStringNull,
+    /*pData*/ &dataimpNoBackstackProp
 };
 
 const DirectUI::PropertyInfo* CNavigateButton::NoBackstackProp = &impNoBackstackProp;
@@ -116,15 +113,15 @@ static DirectUI::Value* svShellExecute()
 
 static DirectUI::PropertyInfoData dataimpShellExecuteProp;
 static const int vvimpShellExecuteProp[] = { 5, -1 };
-static const DirectUI::PropertyInfo impShellExecuteProp =
+static DirectUI::PropertyInfo impShellExecuteProp =
 {
-    .pszName = L"ShellExecute",
-    .fFlags = DirectUI::PF_Normal,
-    .fGroups = DirectUI::PG_None,
-    .pValidValues = vvimpShellExecuteProp,
-    .pEnumMaps = nullptr,
-    .DefaultProc = &svShellExecute,
-    .pData = &dataimpShellExecuteProp
+    /*pszName*/ L"ShellExecute",
+    /*fFlags*/ DirectUI::PF_Normal,
+    /*fGroups*/ DirectUI::PG_None,
+    /*pValidValues*/ vvimpShellExecuteProp,
+    /*pEnumMaps*/ nullptr,
+    /*DefaultProc*/ &svShellExecute,
+    /*pData*/ &dataimpShellExecuteProp
 };
 
 const DirectUI::PropertyInfo* CNavigateButton::ShellExecuteProp = &impShellExecuteProp;
@@ -143,15 +140,15 @@ static DirectUI::Value* svShellExecuteVerb()
 
 static DirectUI::PropertyInfoData dataimpShellExecuteVerbProp;
 static const int vvimpShellExecuteVerbProp[] = { 5, -1 };
-static const DirectUI::PropertyInfo impShellExecuteVerbProp =
+static DirectUI::PropertyInfo impShellExecuteVerbProp =
 {
-    .pszName = L"ShellExecuteVerb",
-    .fFlags = DirectUI::PF_Normal,
-    .fGroups = DirectUI::PG_None,
-    .pValidValues = vvimpShellExecuteVerbProp,
-    .pEnumMaps = nullptr,
-    .DefaultProc = &svShellExecuteVerb,
-    .pData = &dataimpShellExecuteVerbProp
+    /*pszName*/ L"ShellExecuteVerb",
+    /*fFlags*/ DirectUI::PF_Normal,
+    /*fGroups*/ DirectUI::PG_None,
+    /*pValidValues*/ vvimpShellExecuteVerbProp,
+    /*pEnumMaps*/ nullptr,
+    /*DefaultProc*/ &svShellExecuteVerb,
+    /*pData*/ &dataimpShellExecuteVerbProp
 };
 
 const DirectUI::PropertyInfo* CNavigateButton::ShellExecuteVerbProp = &impShellExecuteVerbProp;
@@ -170,15 +167,15 @@ static DirectUI::Value* svShellExecuteParams()
 
 static DirectUI::PropertyInfoData dataimpShellExecuteParamsProp;
 static const int vvimpShellExecuteParamsProp[] = { 5, -1 };
-static const DirectUI::PropertyInfo impShellExecuteParamsProp =
+static DirectUI::PropertyInfo impShellExecuteParamsProp =
 {
-    .pszName = L"ShellExecuteParams",
-    .fFlags = DirectUI::PF_Normal,
-    .fGroups = DirectUI::PG_None,
-    .pValidValues = vvimpShellExecuteParamsProp,
-    .pEnumMaps = nullptr,
-    .DefaultProc = &svShellExecuteParams,
-    .pData = &dataimpShellExecuteParamsProp
+    /*pszName*/ L"ShellExecuteParams",
+    /*fFlags*/ DirectUI::PF_Normal,
+    /*fGroups*/ DirectUI::PG_None,
+    /*pValidValues*/ vvimpShellExecuteParamsProp,
+    /*pEnumMaps*/ nullptr,
+    /*DefaultProc*/ &svShellExecuteParams,
+    /*pData*/ &dataimpShellExecuteParamsProp
 };
 
 const DirectUI::PropertyInfo* CNavigateButton::ShellExecuteParamsProp = &impShellExecuteParamsProp;

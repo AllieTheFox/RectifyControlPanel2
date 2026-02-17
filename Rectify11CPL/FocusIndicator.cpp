@@ -9,17 +9,17 @@ DirectUI::IClassInfo* CFocusIndicator::GetClassInfoW()
     return Class;
 }
 
-static const int vvimpFirstTabTargetProp[] = { 14, -1 };
 static DirectUI::PropertyInfoData dataimpFirstTabTargetProp;
-static const DirectUI::PropertyInfo impFirstTabTargetProp =
+static const int vvimpFirstTabTargetProp[] = { 14, -1 };
+static DirectUI::PropertyInfo impFirstTabTargetProp =
 {
-    .pszName = L"firsttabtarget",
-    .fFlags = 0x2,
-    .fGroups = 0x0,
-    .pValidValues = vvimpFirstTabTargetProp,
-    .pEnumMaps = nullptr,
-    .DefaultProc = &DirectUI::Value::GetAtomZero,
-    .pData = &dataimpFirstTabTargetProp
+    /*pszName*/ L"firsttabtarget",
+    /*fFlags*/ DirectUI::PF_Normal,
+    /*fGroups*/ DirectUI::PG_None,
+    /*pValidValues*/ vvimpFirstTabTargetProp,
+    /*pEnumMaps*/ nullptr,
+    /*DefaultProc*/ &DirectUI::Value::GetAtomZero,
+    /*pData*/ &dataimpFirstTabTargetProp
 };
 
 const DirectUI::PropertyInfo* CFocusIndicator::FirstTabTargetProp = &impFirstTabTargetProp;

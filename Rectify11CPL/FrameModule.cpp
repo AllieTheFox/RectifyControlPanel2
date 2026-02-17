@@ -51,7 +51,7 @@ static DirectUI::Value* WINAPI svDefault()
 
 static const int vvimpModuleIDProp[] = { 5, -1 };
 
-static const DirectUI::PropertyInfo impModuleIDProp =
+static DirectUI::PropertyInfo impModuleIDProp =
 {
     /*pszName*/ L"ModuleID",
     /*fFlags*/ DirectUI::PF_Normal,
