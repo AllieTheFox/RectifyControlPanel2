@@ -31,19 +31,19 @@ CPNAV_LIST CControlPanelNavLink::GetList()
 
 HRESULT CControlPanelNavLink::SetName(HINSTANCE hInstance, UINT nResId)
 {
-    WCHAR szName[MAX_PATH];
-    HRESULT hr = LoadString(hInstance, nResId, szName, ARRAYSIZE(szName)) != 0 ? S_OK : E_FAIL;
+    WCHAR szName[260];
+    HRESULT hr = LoadStringW(hInstance, nResId, szName, ARRAYSIZE(szName)) != 0 ? S_OK : E_FAIL;
     if (SUCCEEDED(hr))
     {
-        hr = SetName(szName);
+        hr = SHStrDupW(szName, &_pszName);
     }
-
     return hr;
 }
 
 HRESULT CControlPanelNavLink::SetName(const WCHAR* pszName)
 {
-    return SHStrDup(pszName, &_pszName);
+    CoTaskMemFree(_pszName);
+    return SHStrDupW(pszName, &_pszName);
 }
 
 WCHAR* CControlPanelNavLink::GetName()
@@ -51,14 +51,23 @@ WCHAR* CControlPanelNavLink::GetName()
     return _pszName;
 }
 
+// @Note: Function body assumed based on SetName pattern
 HRESULT CControlPanelNavLink::SetNameAcc(HINSTANCE hInstance, UINT nResId)
 {
-    return E_NOTIMPL;
+    WCHAR szNameAcc[260];
+    HRESULT hr = LoadStringW(hInstance, nResId, szNameAcc, ARRAYSIZE(szNameAcc)) != 0 ? S_OK : E_FAIL;
+    if (SUCCEEDED(hr))
+    {
+        hr = SHStrDupW(szNameAcc, &_pszNameAcc);
+    }
+    return hr;
 }
 
+// @Note: Function body assumed based on SetName pattern
 HRESULT CControlPanelNavLink::SetNameAcc(const WCHAR* pszNameAcc)
 {
-    return SHStrDup(pszNameAcc, &_pszNameAcc);
+    CoTaskMemFree(_pszNameAcc);
+    return SHStrDupW(pszNameAcc, &_pszNameAcc);
 }
 
 WCHAR* CControlPanelNavLink::GetNameAcc()
@@ -68,8 +77,11 @@ WCHAR* CControlPanelNavLink::GetNameAcc()
 
 HRESULT CControlPanelNavLink::SetIcon(HICON hIcon)
 {
-    _hIcon = hIcon;
-    return _hIcon ? S_OK : E_FAIL;
+    if (hIcon)
+    {
+        _hIcon = CopyIcon(hIcon);
+    }
+    return hIcon != nullptr ? S_OK : E_INVALIDARG;
 }
 
 HICON CControlPanelNavLink::GetIcon()
