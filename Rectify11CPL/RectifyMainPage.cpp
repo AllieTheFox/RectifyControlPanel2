@@ -67,12 +67,22 @@ void RectifyMainPage::OnEvent(DirectUI::Event* iev)
 				DWORD dwDefer = 0;
 				StartDefer(&dwDefer);
 
-				_pbtnEnableAdmin->SetLayoutPos(-3);
-				_pbtnEnableAdmin->SetVisible(FALSE);
-				_pbtnThemetoolInstall->SetEnabled(TRUE);
-
-				_pchkMicaForEveryone->SetEnabled(TRUE);
-				if (_pchkMicaForEveryone->GetCheckedState() != DirectUI::CSF_Unchecked)
+				if (_pbtnEnableAdmin != nullptr)
+				{
+					_pbtnEnableAdmin->SetLayoutPos(-3);
+					_pbtnEnableAdmin->SetVisible(FALSE);
+				}
+				if (_pbtnThemetoolInstall != nullptr)
+				{
+					_pbtnThemetoolInstall->SetEnabled(TRUE);
+				}
+				if (_pchkMicaForEveryone != nullptr)
+				{
+					_pchkMicaForEveryone->SetEnabled(TRUE);
+				}
+				if (_pchkMicaForEveryone != nullptr
+					&& _pchkMicaForEveryone->GetCheckedState() != DirectUI::CSF_Unchecked
+					&& _pchkTabbed != nullptr)
 				{
 					_pchkTabbed->SetEnabled(TRUE);
 				}
@@ -85,12 +95,13 @@ void RectifyMainPage::OnEvent(DirectUI::Event* iev)
 					_pchkClassic,
 					_pchkClassicTransparent
 				};
-
-				for (size_t i = 0; i < 5; i++)
+				for (size_t i = 0; i < ARRAYSIZE(Options); i++)
 				{
-					Options[i]->SetEnabled(TRUE);
+					if (Options[i] != nullptr)
+					{
+						Options[i]->SetEnabled(TRUE);
+					}
 				}
-
 				EndDefer(dwDefer);
 			}
 		}
@@ -100,10 +111,12 @@ void RectifyMainPage::OnEvent(DirectUI::Event* iev)
 		if (iev->uidType == DirectUI::TouchButton::Click)
 		{
 			CRectifyUtil::RestartExplorer();
-
-			// hide restart explorer button
-			_pbtnRestartExplorer->SetLayoutPos(-3);
-			_pbtnRestartExplorer->SetVisible(FALSE);
+			if (_pbtnRestartExplorer != nullptr)
+			{
+				// hide restart explorer button
+				_pbtnRestartExplorer->SetLayoutPos(-3);
+				_pbtnRestartExplorer->SetVisible(FALSE);
+			}
 		}
 	}
 	else if (iev->peTarget == _pcmbThemes)
@@ -291,7 +304,7 @@ void RectifyMainPage::_UpdateThemeGraphic()
 	}
 	DirectUI::Value* bitmap = DirectUI::Value::CreateGraphic(bmp, 3, 0xffffffff, false, false, false);
 	Element* PreviewElement = FindDescendent(DirectUI::StrToID(L"ThemePreview"));
-	if (PreviewElement != NULL)
+	if (PreviewElement != nullptr)
 	{
 		PreviewElement->SetValue(Element::ContentProp, 1, bitmap);
 	}
@@ -336,10 +349,10 @@ HRESULT RectifyMainPage::LayoutInitialized()
 {
 	CControlPanelPage::LayoutInitialized();
 
-	HRESULT hr = IUnknown_GetSite(static_cast<IObjectWithSite *>(this), IID_PPV_ARGS(&_punkSite));
+	HRESULT hr = IUnknown_GetSite(static_cast<IObjectWithSite*>(this), IID_PPV_ARGS(&_punkSite));
 	if (SUCCEEDED(hr))
 	{
-		DUI_WalkIUnknownElements(this, (PFNELEMENTCALLBACK)DUI_SetSiteOnUnknown, (LPARAM)_punkSite);
+		DUI_WalkIUnknownElements(this, DUI_SetSiteOnUnknown, reinterpret_cast<LPARAM>(_punkSite));
 	}
 
 	hr = themetool_init();
@@ -379,7 +392,7 @@ HRESULT RectifyMainPage::LayoutInitialized()
 		_pchkClassicTransparent
 	};
 
-	if (_pcmbThemes != NULL)
+	if (_pcmbThemes != nullptr)
 	{
 		WCHAR value[255] = { 0 };
 		PVOID pvData = value;
@@ -439,7 +452,7 @@ HRESULT RectifyMainPage::LayoutInitialized()
 #endif // 0
 		}
 
-		if (version != NULL)
+		if (version != nullptr)
 		{
 			WCHAR value[255] = { 0 };
 			PVOID pvData = value;
@@ -478,7 +491,7 @@ HRESULT RectifyMainPage::LayoutInitialized()
 		}
 	}
 
-	if (_pchkMicaForEveryone != NULL)
+	if (_pchkMicaForEveryone != nullptr)
 	{
 		_pchkMicaForEveryone->SetToggleOnClick(true);
 		BOOL MicaEnabled;
@@ -487,13 +500,13 @@ HRESULT RectifyMainPage::LayoutInitialized()
 
 		_pchkMicaForEveryone->SetCheckedState(MicaEnabled ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
 
-		if (!MicaEnabled && _pchkTabbed != NULL)
+		if (!MicaEnabled && _pchkTabbed != nullptr)
 		{
 			_pchkTabbed->SetEnabled(FALSE);
 		}
 	}
 
-	if (_pchkTabbed != NULL)
+	if (_pchkTabbed != nullptr)
 	{
 		BOOL MicaEnabled;
 		BOOL TabbedEnabled;
@@ -503,7 +516,7 @@ HRESULT RectifyMainPage::LayoutInitialized()
 		_pchkTabbed->SetCheckedState(MicaEnabled ? DirectUI::CSF_Checked : DirectUI::CSF_Unchecked);
 	}
 
-	if (_pbtnRestartExplorer != NULL)
+	if (_pbtnRestartExplorer != nullptr)
 	{
 		_pbtnRestartExplorer->SetLayoutPos(-3);
 		_pbtnRestartExplorer->SetVisible(FALSE);
@@ -513,23 +526,32 @@ HRESULT RectifyMainPage::LayoutInitialized()
 
 	for (size_t i = 0; i < 5; i++)
 	{
+		if (Options[i] == nullptr)
+			continue;
 		if (!_fAdmin)
+		{
 			Options[i]->SetEnabled(FALSE);
+		}
 		else
+		{
 			Options[i]->SetEnabled(TRUE);
+		}
 	}
-	if (SUCCEEDED(_pRectifyUtil->GetCurrentMenuIndex(&menuIndex)))
+	if (SUCCEEDED(_pRectifyUtil->GetCurrentMenuIndex(&menuIndex)) && Options[menuIndex] != nullptr)
 	{
 		Options[menuIndex]->SetSelected(true);
 	}
 
 	if (_fAdmin)
 	{
-		_pbtnEnableAdmin->SetLayoutPos(-3);
-		_pbtnEnableAdmin->SetVisible(FALSE);
-		_pbtnThemetoolInstall->SetEnabled(TRUE);
+		if (_pbtnEnableAdmin != nullptr && _pbtnThemetoolInstall != nullptr)
+		{
+			_pbtnEnableAdmin->SetLayoutPos(-3);
+			_pbtnEnableAdmin->SetVisible(FALSE);
+			_pbtnThemetoolInstall->SetEnabled(TRUE);
+		}
 	}
-	else
+	else if (_pchkMicaForEveryone && _pchkTabbed && _pbtnThemetoolInstall)
 	{
 		_pchkMicaForEveryone->SetEnabled(FALSE);
 		_pchkTabbed->SetEnabled(FALSE);
@@ -581,56 +603,51 @@ HRESULT RectifyMainPage::_InitNavLinks()
 
 void RectifyMainPage::_UpdateThemetoolStatus()
 {
-	Element *status = (DirectUI::TouchButton *)FindDescendent(DirectUI::StrToID(L"ThemetoolStatus"));
-
-	ULONG flags = secureuxtheme_get_state_flags();
-	wstring statusText;
-
-	WCHAR buffer1[1024];
-	if (FAILED(LoadStringW(g_hinst, IDS_THEMETOOLSTATUS, buffer1, 1023)))
+	Element* status = (DirectUI::TouchButton*)FindDescendent(DirectUI::StrToID(L"ThemetoolStatus"));
+	if (status != nullptr)
 	{
-		wcscpy_s(buffer1, L"[SECURE UX STATUS STRING MISSING]: ");
-	}
+		ULONG flags = secureuxtheme_get_state_flags();
+		wstring statusText;
 
-	statusText += buffer1;
-
-
-	if (flags & SECUREUXTHEME_STATE_INSTALLED)
-	{
-		if (flags & SECUREUXTHEME_STATE_CURRENT)
+		WCHAR buffer1[1024];
+		if (FAILED(LoadStringW(g_hinst, IDS_THEMETOOLSTATUS, buffer1, 1023)))
 		{
-			if (FAILED(LoadStringW(g_hinst, IDS_OK, buffer1, 1023)))
-			{
-				wcscpy_s(buffer1, L"OK STRING MISSING");
-			}
-
-			statusText += buffer1;
-
-			status->SetForegroundStdColor(44); // forest green
+			wcscpy_s(buffer1, L"[SECURE UX STATUS STRING MISSING]: ");
 		}
-		else {
-			if (FAILED(LoadStringW(g_hinst, IDS_OUTDATED, buffer1, 1023)))
-			{
-				wcscpy_s(buffer1, L"OUTDATED STRING MISSING");
-			}
-
-			statusText += buffer1;
-
-			status->SetForegroundStdColor(138); // yellow
-		}
-	}
-	else {
-		if (FAILED(LoadStringW(g_hinst, IDS_NOTINSTALLED, buffer1, 1023)))
-		{
-			wcscpy_s(buffer1, L"NOT INSTALLED STRING MISSING");
-		}
-
 		statusText += buffer1;
 
-		status->SetForegroundStdColor(113); // red
+		if (flags & SECUREUXTHEME_STATE_INSTALLED)
+		{
+			if (flags & SECUREUXTHEME_STATE_CURRENT)
+			{
+				if (FAILED(LoadStringW(g_hinst, IDS_OK, buffer1, 1023)))
+				{
+					wcscpy_s(buffer1, L"OK STRING MISSING");
+				}
+				statusText += buffer1;
+				status->SetForegroundStdColor(44); // forest green
+			}
+			else
+			{
+				if (FAILED(LoadStringW(g_hinst, IDS_OUTDATED, buffer1, 1023)))
+				{
+					wcscpy_s(buffer1, L"OUTDATED STRING MISSING");
+				}
+				statusText += buffer1;
+				status->SetForegroundStdColor(138); // yellow
+			}
+		}
+		else
+		{
+			if (FAILED(LoadStringW(g_hinst, IDS_NOTINSTALLED, buffer1, 1023)))
+			{
+				wcscpy_s(buffer1, L"NOT INSTALLED STRING MISSING");
+			}
+			statusText += buffer1;
+			status->SetForegroundStdColor(113); // red
+		}
+		status->SetContentString(statusText.c_str());
 	}
-
-	status->SetContentString(statusText.c_str());
 }
 
 HWND RectifyMainPage::_GetMainHwnd()
